@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
-import { Container } from "@mui/material";
-import { Navbar } from "./component/navbar.jsx";
-import { SplitScreen } from "./component/splitScreen.jsx";
+import { Outlet } from 'react-router-dom';
+import { Container } from '@mui/material';
+import { Navbar } from './component/navbar.jsx';
+import { SplitScreen } from './component/splitScreen.jsx';
 
 export const Layout = () => {
   return (
