@@ -39,7 +39,7 @@ export class UserService {
         email: inputUser.email
       }
     });
-    if(targetUser && targetUser.password == inputUser.password) return targetUser;
+    if(targetUser != null && targetUser.password == inputUser.password) return targetUser;
     return null;
 }
 
