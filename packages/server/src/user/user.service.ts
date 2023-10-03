@@ -33,4 +33,14 @@ export class UserService {
       }
     });
   }
+  async vaildUserData(inputUser: Prisma.UserWhereUniqueInput): Promise<User> {
+    const targetUser =  await this.prisma.user.findUnique({
+      where:{
+        email: inputUser.email
+      }
+    });
+    if(targetUser && targetUser.password == inputUser.password) return targetUser;
+    return null;
+}
+
 }
