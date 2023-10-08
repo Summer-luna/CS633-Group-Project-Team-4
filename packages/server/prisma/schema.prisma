@@ -11,12 +11,41 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String         @id @default(uuid())
+  email     String         @unique
   lastName  String
   firstName String
-  buID      String?  @unique
+  buID      String?        @unique
   password  String?
-  role      Int      @default(0)
-  createdAt DateTime @default(now())
+  role      Int            @default(0)
+  createdAt DateTime       @default(now())
+  courses   UserOnCourse[]
+}
+
+model Course {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  location    String?
+  semesterId  Int
+  semester    Semester       @relation(fields: [semesterId], references: [id])
+  startDate   DateTime
+  endDate     DateTime
+  User        UserOnCourse[]
+}
+
+model UserOnCourse {
+  userId   String
+  User     User     @relation(fields: [userId], references: [id])
+  courseId String
+  Course   Course   @relation(fields: [courseId], references: [id])
+  enrolled DateTime @default(now())
+
+  @@id([courseId, userId])
+}
+
+model Semester {
+  id     Int      @id @default(autoincrement())
+  name   String
+  Course Course[]
 }
