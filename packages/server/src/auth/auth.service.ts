@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UserSignupDto } from './dto/auth.dto';
+import { UserSignupDto, UserLogInDto } from './dto/auth.dto';
 import { AccessToken } from './model/auth.model';
 
 @Injectable()
@@ -20,5 +20,17 @@ export class AuthService {
     } catch (error) {
       return error;
     }
+  }
+
+  async logIn(user: UserLogInDto): Promise<AccessToken> {
+    const validUser = await this.userService.validUserData(user.email, user.password);
+    if (!validUser) {
+      throw new UnauthorizedException('User email or password incorrect');
+    }
+    console.log(validUser);
+    const payload = { id: validUser.id, role: validUser.role, type: 'access' };
+    return {
+      accessToken: this.jwtService.sign(payload, { expiresIn: this.configService.get('JWT_EXPIRATION') })
+    };
   }
 }

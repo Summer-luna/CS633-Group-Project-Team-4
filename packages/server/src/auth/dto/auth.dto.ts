@@ -31,3 +31,16 @@ export class UserSignupDto {
   @Field()
   role: number;
 }
+
+@InputType()
+export class UserLogInDto {
+  @IsDefined()
+  @IsEmail()
+  @Field()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  password: string;
+}

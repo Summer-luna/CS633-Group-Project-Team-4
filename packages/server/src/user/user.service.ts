@@ -33,4 +33,14 @@ export class UserService {
       }
     });
   }
+  async validUserData(inputEmail: string, inputPassword: string): Promise<User> {
+    const targetUser = await this.prisma.user.findUnique({
+      where: {
+        email: inputEmail
+      }
+    });
+    const checker = await bcrypt.compare(inputPassword, targetUser.password);
+    if (targetUser && checker) return targetUser;
+    return null;
+  }
 }
