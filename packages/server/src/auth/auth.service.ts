@@ -23,11 +23,11 @@ export class AuthService {
   }
 
   async logIn(user: UserLogInDto): Promise<AccessToken> {
-    const validUser = await this.userService.vaildUserData(user);
+    const validUser = await this.userService.vaildUserData(user.email,user.password);
     if (!validUser) {
       throw new UnauthorizedException('User email or password incorrect');
     }
-    const payload = { firstName: validUser.firstName, lastName: validUser.lastName, id: validUser.id, role: validUser.role, buID: validUser.buID, type: 'access' };
+    const payload = { id: validUser.id, role: validUser.role, buID: validUser.buID, type: 'access' };
     return {
       accessToken: this.jwtService.sign(payload)
     };

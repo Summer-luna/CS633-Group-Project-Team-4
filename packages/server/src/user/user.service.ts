@@ -33,13 +33,13 @@ export class UserService {
       }
     });
   }
-  async vaildUserData(inputUser: Prisma.UserWhereUniqueInput): Promise<User> {
+  async vaildUserData(inputEmail: string, inputPassword: string): Promise<User> {
     const targetUser = await this.prisma.user.findUnique({
       where: {
-        email: inputUser.email
+        email: inputEmail
       }
     });
-    if (targetUser && targetUser.password == inputUser.password) return targetUser;
+    if (targetUser && targetUser.password == inputPassword) return targetUser;
     return null;
   }
 }
