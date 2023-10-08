@@ -39,7 +39,7 @@ export class UserService {
         email: inputEmail
       }
     });
-    const checker = await bcrypt.compare(inputPassword,targetUser.password);
+    const checker = await bcrypt.compare(inputPassword, targetUser.password);
     if (targetUser && checker) return targetUser;
     return null;
   }
