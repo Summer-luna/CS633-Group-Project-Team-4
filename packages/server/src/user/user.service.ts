@@ -33,7 +33,7 @@ export class UserService {
       }
     });
   }
-  async vaildUserData(inputEmail: string, inputPassword: string): Promise<User> {
+  async validUserData(inputEmail: string, inputPassword: string): Promise<User> {
     const targetUser = await this.prisma.user.findUnique({
       where: {
         email: inputEmail

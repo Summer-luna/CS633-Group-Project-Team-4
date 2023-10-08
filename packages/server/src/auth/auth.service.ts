@@ -23,7 +23,7 @@ export class AuthService {
   }
 
   async logIn(user: UserLogInDto): Promise<AccessToken> {
-    const validUser = await this.userService.vaildUserData(user.email, user.password);
+    const validUser = await this.userService.validUserData(user.email, user.password);
     if (!validUser) {
       throw new UnauthorizedException('User email or password incorrect');
     }
