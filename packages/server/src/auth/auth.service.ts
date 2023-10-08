@@ -27,9 +27,10 @@ export class AuthService {
     if (!validUser) {
       throw new UnauthorizedException('User email or password incorrect');
     }
-    const payload = { id: validUser.id, role: validUser.role, buID: validUser.buID, type: 'access' };
+    console.log(validUser)
+    const payload = { id: validUser.id, role: validUser.role, type: 'access' };
     return {
-      accessToken: this.jwtService.sign(payload)
+      accessToken: this.jwtService.sign(payload, { expiresIn: this.configService.get('JWT_EXPIRATION') })
     };
   }
 }

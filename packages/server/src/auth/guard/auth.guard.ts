@@ -12,6 +12,7 @@ import { Roles } from 'src/role/roles.decorator';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private reflectir: Reflector) {}
+  private readonly logger = new Logger(AuthGuard.name);
 
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflectir.get(Roles, context.getHandler());
@@ -24,6 +25,7 @@ export class AuthGuard implements CanActivate {
       return this.matchRoles(roles, user.role);
     } catch (err) {
       // set log information here
+      this.logger.log('User does not have the required role');
       return false;
     }
   }
