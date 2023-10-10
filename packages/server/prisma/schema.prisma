@@ -29,8 +29,8 @@ model Course {
   location    String?
   semesterId  Int
   semester    Semester       @relation(fields: [semesterId], references: [id])
-  startDate   DateTime
-  endDate     DateTime
+  startDate   DateTime       @db.Date
+  endDate     DateTime       @db.Date
   User        UserOnCourse[]
 }
 
