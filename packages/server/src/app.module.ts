@@ -8,9 +8,10 @@ import { JwtModule } from './jwt/jwt.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { CourseModule } from './course/course.module';
+import { InstructorModule } from './instructor/instructor.module';
 
 @Module({
-  imports: [UserModule, AuthModule, CourseModule, JwtModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [UserModule, AuthModule, InstructorModule, CourseModule, JwtModule, ConfigModule.forRoot({ isGlobal: true })],
   controllers: [AppController],
   providers: [
     AppService,

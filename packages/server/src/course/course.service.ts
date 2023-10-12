@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
-import { Course } from '@prisma/client';
+import { Course, Prisma } from '@prisma/client';
 
 @Injectable()
 export class CourseService {
   constructor(private prisma: PrismaService) {}
-  async addCourse(course: AddCourseDto): Promise<Course> {
+  async addCourse(course: Prisma.CourseUncheckedCreateInput): Promise<Course> {
     const courseCount = await this.prisma.course.count({
       where: {
-        OR: [{ name: course.courseName, semesterId: course.semesterID }]
+        OR: [{ name: course.name, semesterId: course.semesterId, startDate: course.startDate, endDate: course.endDate }]
       }
     });
 
@@ -19,26 +19,26 @@ export class CourseService {
 
     return this.prisma.course.create({
       data: {
-        name: course.courseName,
+        name: course.name,
         description: course.description,
         location: course.location,
-        semesterId: course.semesterID,
+        semesterId: course.semesterId,
         startDate: course.startDate,
         endDate: course.endDate
       }
     });
   }
 
-  async updateCourse(course: UpdateCourseDto): Promise<Course> {
+  async updateCourse(course: Prisma.CourseUncheckedUpdateInput): Promise<Course> {
     const currentCourse = await this.prisma.course.update({
       where: {
-        id: course.id
+        id: course.id.toString()
       },
       data: {
-        name: course.courseName,
+        name: course.name,
         description: course.description,
         location: course.location,
-        semesterId: course.semesterID,
+        semesterId: course.semesterId,
         startDate: course.startDate,
         endDate: course.endDate
       }
@@ -54,13 +54,25 @@ export class CourseService {
     });
   }
 
-  async getCourseByName(course: GetCourseByNameDto): Promise<Course[]> {
+  async getCourseByName(courseName: GetCourseByNameDto): Promise<Course[]> {
     const targetCourse = await this.prisma.course.findMany({
       where: {
-        name: course.courseName,
+        name: courseName.name,
         endDate: {
-          gt: new Date().toLocaleDateString()
+          gt: new Date().toISOString()
         }
+      }
+    });
+    return targetCourse;
+  }
+
+  async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
+    const targetCourse = await this.prisma.course.findFirst({
+      where: {
+        name: course.name,
+        semesterId: course.semesterId,
+        startDate: course.startDate,
+        endDate: course.endDate
       }
     });
     return targetCourse;

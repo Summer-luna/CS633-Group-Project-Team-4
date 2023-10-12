@@ -1,4 +1,3 @@
-import { Get } from '@nestjs/common';
 import { Field, InputType } from '@nestjs/graphql';
 import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
 
@@ -7,7 +6,7 @@ export class AddCourseDto {
   @IsDefined()
   @IsString()
   @Field()
-  courseName: string;
+  name: string;
 
   @IsOptional()
   @IsString()
@@ -21,7 +20,7 @@ export class AddCourseDto {
   @IsNotEmpty()
   @IsNumber()
   @Field()
-  semesterID: number;
+  semesterId: number;
 
   @IsDateString()
   @Field()
@@ -42,7 +41,7 @@ export class UpdateCourseDto {
   @IsNotEmpty()
   @IsString()
   @Field()
-  courseName: string;
+  name: string;
 
   @IsOptional()
   @IsString()
@@ -56,7 +55,7 @@ export class UpdateCourseDto {
   @IsNotEmpty()
   @IsNumber()
   @Field()
-  semesterID: number;
+  semesterId: number;
 
   @IsDateString()
   @Field()
@@ -81,5 +80,5 @@ export class GetCourseByNameDto {
   @IsNotEmpty()
   @IsString()
   @Field()
-  courseName: string;
+  name: string;
 }
