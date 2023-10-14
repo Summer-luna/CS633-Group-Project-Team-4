@@ -1,17 +1,5 @@
-import * as React from 'react'
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  Link,
-  Typography,
-  Popover,
-  ListItem,
-  List,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import * as React from 'react';
+import { Avatar, Box, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 export const Navbar = () => {
@@ -24,12 +12,12 @@ export const Navbar = () => {
     setAvatarDrop(null);
   };
 
-  const handleLogOut = () =>{
-    console.log("Log out");
-  }
+  const handleLogOut = () => {
+    console.log('Log out');
+  };
 
   const open = Boolean(avatarDrop);
-  const id = open ? "avatar-popover" : undefined;
+  const id = open ? 'avatar-popover' : undefined;
   return (
     <Grid
       container
@@ -37,8 +25,8 @@ export const Navbar = () => {
       justifyContent="space-between"
       alignItems="center"
       sx={{
-        borderBottom: "1px solid black",
-        marginBottom: 6,
+        borderBottom: '1px solid black',
+        marginBottom: 6
       }}
     >
       <Grid item>
@@ -50,31 +38,27 @@ export const Navbar = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '6px',
+            borderRadius: '6px'
           }}
         >
           <Typography
             component="h1"
             variant="h4"
             sx={{
-              color: 'white',
-            }}>
+              color: 'white'
+            }}
+          >
             ClassGuardian
           </Typography>
         </Box>
       </Grid>
       <Grid item>
-        <Grid
-          container direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={3}
-        >
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
           <Grid item>
-            <Link href={"/"}>Home</Link>
+            <Link href={'/'}>Home</Link>
           </Grid>
           <Grid item>
-            <Link href={"/signin"}>Sign In</Link>
+            <Link href={'/signin'}>Sign In</Link>
           </Grid>
           <Grid item>
             <Button onClick={handleAvatarClick}>
@@ -87,8 +71,8 @@ export const Navbar = () => {
               anchorEl={avatarDrop}
               onClose={handleAvatarClose}
               anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left"
+                vertical: 'bottom',
+                horizontal: 'left'
               }}
             >
               <List disablePadding>
@@ -103,7 +87,5 @@ export const Navbar = () => {
         </Grid>
       </Grid>
     </Grid>
-
-
-    );
+  );
 };
