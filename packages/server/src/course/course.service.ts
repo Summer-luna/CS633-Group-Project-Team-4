@@ -69,7 +69,7 @@ export class CourseService {
   }
 
   async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
-    const targetCourse = await this.prisma.course.findFirst({
+    return this.prisma.course.findFirst({
       where: {
         name: course.name,
         semesterId: course.semesterId,
@@ -77,7 +77,6 @@ export class CourseService {
         endDate: course.endDate
       }
     });
-    return targetCourse;
   }
 
   async getAllCourses(): Promise<Course[]> {
