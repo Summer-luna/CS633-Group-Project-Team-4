@@ -34,7 +34,7 @@ export class CourseService {
   }
 
   async updateCourse(course: Prisma.CourseUncheckedUpdateInput): Promise<Course> {
-    const currentCourse = await this.prisma.course.update({
+    return this.prisma.course.update({
       where: {
         id: course.id.toString()
       },
@@ -47,11 +47,10 @@ export class CourseService {
         endDate: course.endDate
       }
     });
-    return currentCourse;
   }
 
   async deleteCourse(course: DeleteCourseDto) {
-    await this.prisma.course.delete({
+    return this.prisma.course.delete({
       where: {
         id: course.id
       }
@@ -59,7 +58,7 @@ export class CourseService {
   }
 
   async getCourseByName(courseName: GetCourseByNameDto): Promise<Course[]> {
-    const targetCourse = await this.prisma.course.findMany({
+    return this.prisma.course.findMany({
       where: {
         name: courseName.name,
         endDate: {
@@ -67,7 +66,6 @@ export class CourseService {
         }
       }
     });
-    return targetCourse;
   }
 
   async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
