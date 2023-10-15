@@ -5,7 +5,7 @@ import { Roles } from 'src/role/roles.decorator';
 /*
  * How to use this class?
  * Example: Use it in xxx.controller.ts
- * @Post()
+ * @Post("0")
  * @Roles(['role name here'])
  * async feature's name (@Body() xxx) {} ...
  */
