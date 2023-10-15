@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
 import * as randomatic from 'randomatic';
