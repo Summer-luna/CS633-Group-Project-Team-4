@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
+import * as randomatic from 'randomatic';
 
 @Injectable()
 export class CourseService {
   constructor(private prisma: PrismaService) {}
-  async addCourse(course: Prisma.CourseUncheckedCreateInput): Promise<Course> {
+  async addCourse(course: AddCourseDto): Promise<Course> {
     const courseCount = await this.prisma.course.count({
       where: {
         OR: [{ name: course.name, semesterId: course.semesterId, startDate: course.startDate, endDate: course.endDate }]
@@ -17,9 +18,12 @@ export class CourseService {
       throw new Error('Course already exist in the database.');
     }
 
+    const joinCode = await this.generateRandomCode();
+
     return this.prisma.course.create({
       data: {
         name: course.name,
+        joinCode: joinCode,
         description: course.description,
         location: course.location,
         semesterId: course.semesterId,
@@ -76,5 +80,20 @@ export class CourseService {
       }
     });
     return targetCourse;
+  }
+
+  async getAllCourses(): Promise<Course[]> {
+    return this.prisma.course.findMany({
+      where: {
+        endDate: {
+          gt: new Date().toISOString()
+        }
+      }
+    });
+  }
+
+  async generateRandomCode(): Promise<number> {
+    // Generate a random six-digit code
+    return randomatic('0', 6);
   }
 }

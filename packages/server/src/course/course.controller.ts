@@ -1,18 +1,19 @@
 import { Body, Controller, Post, Get, HttpCode, HttpStatus, Request, UseGuards, Put, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
+import { CourseModel } from './model/course.model';
 
 @Controller('course')
 export class CourseController {
   constructor(private readonly classService: CourseService) {}
 
   @Post('/add')
-  async addCourse(@Body() newClass: AddCourseDto) {
+  async addCourse(@Body() newClass: AddCourseDto): Promise<CourseModel> {
     return await this.classService.addCourse(newClass);
   }
 
   @Put('/update')
-  async updateCourse(@Body() updateCourse: UpdateCourseDto) {
+  async updateCourse(@Body() updateCourse: UpdateCourseDto): Promise<CourseModel> {
     return await this.classService.updateCourse(updateCourse);
   }
 
@@ -22,7 +23,12 @@ export class CourseController {
   }
 
   @Get('/getbyname')
-  async getCourseByName(@Body() getCourse: GetCourseByNameDto) {
+  async getCourseByName(@Body() getCourse: GetCourseByNameDto): Promise<CourseModel[]> {
     return await this.classService.getCourseByName(getCourse);
+  }
+
+  @Get('/getall')
+  async getAllCourses() {
+    return await this.classService.getAllCourses();
   }
 }
