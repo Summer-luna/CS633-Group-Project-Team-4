@@ -10,8 +10,6 @@ export const AuthGuard = () => {
   useEffect(() => {
     if (initialized && !token) {
       navigate(Paths.LOGIN);
-    } else if (initialized && decoded_token?.role !== 1) {
-      navigate(Paths.PERMISSION_REQUIRED);
     }
   }, [initialized, token, decoded_token]);
 

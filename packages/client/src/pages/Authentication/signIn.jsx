@@ -1,13 +1,25 @@
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import { axiosInstance } from '../../utils/axioInstance.js';
+import { useNavigate } from 'react-router-dom';
+import { Paths } from '../../constants/Paths.js';
+import { useAuth } from '../../context/auth.context.jsx';
 
 export const SignIn = () => {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const res = await axiosInstance.post('/auth/login', {
       email: data.get('email'),
       password: data.get('password')
     });
+
+    if (res.data) {
+      setToken(res.data.accessToken);
+      navigate(Paths.HOME);
+    }
   };
 
   return (

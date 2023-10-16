@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Avatar, Box, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Paths } from '../../../constants/Paths.js';
 
 export const Navbar = () => {
   const [avatarDrop, setAvatarDrop] = React.useState(null);
@@ -55,10 +56,10 @@ export const Navbar = () => {
       <Grid item>
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
           <Grid item>
-            <Link href={'/'}>Home</Link>
+            <Link href={Paths.HOME}>Home</Link>
           </Grid>
           <Grid item>
-            <Link href={'/signin'}>Sign In</Link>
+            <Link href={Paths.LOGIN}>Sign In</Link>
           </Grid>
           <Grid item>
             <Button onClick={handleAvatarClick}>

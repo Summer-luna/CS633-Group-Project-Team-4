@@ -73,8 +73,8 @@ export const SignUp = () => {
               <FormControl fullWidth>
                 <InputLabel id="role-select-label">Role</InputLabel>
                 <Select labelId="role-select-label" id="role-selection" value={role} label="Role" onChange={handleChange}>
-                  <MenuItem value={1}>Student</MenuItem>
-                  <MenuItem value={0}>Professor</MenuItem>
+                  <MenuItem value={0}>Student</MenuItem>
+                  <MenuItem value={1}>Professor</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
