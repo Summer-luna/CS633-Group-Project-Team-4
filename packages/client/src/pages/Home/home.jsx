@@ -1,25 +1,32 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/auth.context.jsx';
+import { axiosInstance } from '../../utils/axioInstance.js';
 
 export const Home = () => {
-  const courses = [
-    {
-      id: 1,
-      name: 'Course 1'
-    },
-    {
-      id: 2,
-      name: 'Course 2'
-    },
-    {
-      id: 3,
-      name: 'Course 3'
-    },
-    {
-      id: 4,
-      name: 'Course 4'
-    }
-  ];
+  const [courses, setCourses] = useState([]);
+  const [user, setUser] = useState({});
+  const { token, decoded_token } = useAuth();
+  const fullName = `${user.firstName} ${user.lastName}`;
+  console.log(courses);
+
+  useEffect(() => {
+    const getCourses = async () => {
+      if (decoded_token) {
+        const res = await axiosInstance.get(`/user/${decoded_token.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        setUser(res.data);
+        setCourses(res.data.courses);
+      }
+    };
+
+    getCourses();
+  }, [decoded_token]);
 
   return (
     <Grid container justifyContent="space-between">
@@ -33,7 +40,7 @@ export const Home = () => {
                 color: '#265792'
               }}
             >
-              Professor Name
+              {fullName}
             </Typography>
           </Grid>
 
@@ -69,9 +76,9 @@ export const Home = () => {
         </Grid>
       </Grid>
 
-      {courses.map((course) => (
-        <CourseCard key={course.id} courseName={course.name} />
-      ))}
+      {courses.map((course) => {
+        return <CourseCard key={course.courseId} courseName={course.Course.name} />;
+      })}
     </Grid>
   );
 };

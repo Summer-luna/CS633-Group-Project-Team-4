@@ -19,7 +19,6 @@ export const CourseCard = (props) => {
       }}
     >
       <Typography component="h1" variant="h4" align="center">
-        {/* eslint-disable-next-line react/prop-types */}
         {props.courseName}
       </Typography>
     </Grid>
