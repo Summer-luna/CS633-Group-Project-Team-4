@@ -9,7 +9,6 @@ export const Home = () => {
   const [user, setUser] = useState({});
   const { token, decoded_token } = useAuth();
   const fullName = `${user.firstName} ${user.lastName}`;
-  console.log(courses);
 
   useEffect(() => {
     const getCourses = async () => {
