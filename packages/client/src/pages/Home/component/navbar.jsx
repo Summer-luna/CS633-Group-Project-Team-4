@@ -2,9 +2,12 @@ import * as React from 'react';
 import { Avatar, Box, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '../../../constants/Paths.js';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
   const [avatarDrop, setAvatarDrop] = React.useState(null);
+  const navigate = useNavigate();
+
   const handleAvatarClick = (e) => {
     setAvatarDrop(e.currentTarget);
   };
@@ -14,7 +17,7 @@ export const Navbar = () => {
   };
 
   const handleLogOut = () => {
-    console.log('Log out');
+    navigate(Paths.LOGOUT);
   };
 
   const open = Boolean(avatarDrop);
