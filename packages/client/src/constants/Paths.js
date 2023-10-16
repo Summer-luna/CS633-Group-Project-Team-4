@@ -1,3 +1,7 @@
 export const Paths = {
-  HOME: "/",
+  HOME: '/',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  LOGOUT: '/logout',
+  PERMISSION_REQUIRED: '/permission-required'
 };
