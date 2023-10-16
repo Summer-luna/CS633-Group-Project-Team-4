@@ -27,11 +27,11 @@ export const SignIn = () => {
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+              <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" variant="filled" />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" />
+              <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" variant="filled" />
             </Grid>
           </Grid>
 

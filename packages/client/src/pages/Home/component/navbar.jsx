@@ -55,10 +55,14 @@ export const Navbar = () => {
       <Grid item>
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
           <Grid item>
-            <Link href={'/'}>Home</Link>
+            <Link href={'/'} variant="h4" underline="hover">
+              Home
+            </Link>
           </Grid>
           <Grid item>
-            <Link href={'/signin'}>Sign In</Link>
+            <Link href={'/signin'} variant="h4" underline="hover">
+              Sign In
+            </Link>
           </Grid>
           <Grid item>
             <Button onClick={handleAvatarClick}>
