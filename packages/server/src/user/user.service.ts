@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { UserModel } from './user/user.model';
 
 @Injectable()
 export class UserService {
