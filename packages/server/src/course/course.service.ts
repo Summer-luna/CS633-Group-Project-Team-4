@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, GetCourseListByUserDto, UpdateCourseDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
 
@@ -76,5 +76,22 @@ export class CourseService {
       }
     });
     return targetCourse;
+  }
+
+  async getAllCourseByUser(userId: GetCourseListByUserDto) {
+    const courseIdList = await this.prisma.userOnCourse.findMany({
+      where: {
+        userId: userId.userId
+      },
+      select: {
+        Course: true
+      }
+    });
+    for (let i = 0; i < courseIdList.length; i++) {
+      if (courseIdList[i].Course.endDate < new Date()) {
+        courseIdList.splice(i, 1);
+      }
+    }
+    return courseIdList;
   }
 }

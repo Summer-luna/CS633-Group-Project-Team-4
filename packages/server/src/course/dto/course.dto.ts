@@ -82,3 +82,12 @@ export class GetCourseByNameDto {
   @Field()
   name: string;
 }
+
+@InputType()
+export class GetCourseListByUserDto {
+  @IsNotEmpty()
+  @IsString()
+  @IsDefined()
+  @Field()
+  userId: string;
+}
