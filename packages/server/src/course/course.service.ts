@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, GetCourseListByUserDto, UpdateCourseDto } from './dto/course.dto';
+import { GetCourseByNameDto, GetCourseListByUserDto, UpdateCourseDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
 
 @Injectable()
 export class CourseService {
   constructor(private prisma: PrismaService) {}
+
+  // the function which can add course into the database (working with "chechIn" function in instroctor.service)
   async addCourse(course: Prisma.CourseUncheckedCreateInput): Promise<Course> {
     const courseCount = await this.prisma.course.count({
       where: {
@@ -29,6 +31,7 @@ export class CourseService {
     });
   }
 
+  // function to help instructor update the course information.
   async updateCourse(course: Prisma.CourseUncheckedUpdateInput): Promise<Course> {
     const currentCourse = await this.prisma.course.update({
       where: {
@@ -46,14 +49,15 @@ export class CourseService {
     return currentCourse;
   }
 
-  async deleteCourse(course: DeleteCourseDto) {
+  async deleteCourse(courseId: string) {
     await this.prisma.course.delete({
       where: {
-        id: course.id
+        id: courseId
       }
     });
   }
 
+  // function to search the course by course's name
   async getCourseByName(courseName: GetCourseByNameDto): Promise<Course[]> {
     const targetCourse = await this.prisma.course.findMany({
       where: {
@@ -66,6 +70,7 @@ export class CourseService {
     return targetCourse;
   }
 
+  // function to check the detail information of target course (working with "checkIn" function in Instructor.service)
   async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
     const targetCourse = await this.prisma.course.findFirst({
       where: {
@@ -78,6 +83,8 @@ export class CourseService {
     return targetCourse;
   }
 
+  //this function can help to list all enroll course for target user.
+  //(if the course has already been over, it will not on the result list)
   async getAllCourseByUser(userId: GetCourseListByUserDto) {
     const courseIdList = await this.prisma.userOnCourse.findMany({
       where: {

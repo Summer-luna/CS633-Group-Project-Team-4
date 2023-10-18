@@ -10,6 +10,7 @@ export class UserService {
 
   private readonly SALT_ROUNDS = 15;
 
+  // creating function for new user to sign up their account
   async createUser(newUser: Prisma.UserCreateInput): Promise<User> {
     const userCount = await this.prisma.user.count({
       where: {
@@ -34,6 +35,8 @@ export class UserService {
       }
     });
   }
+
+  // check if user input the correct email and password for log in action
   async validUserData(inputEmail: string, inputPassword: string): Promise<User> {
     const targetUser = await this.prisma.user.findUnique({
       where: {
@@ -45,6 +48,7 @@ export class UserService {
     return null;
   }
 
+  // function to update user information. Both student and instructor can use this function
   async updateUser(user: UpdateUserDto): Promise<User> {
     const updateUser = await this.prisma.user.update({
       where: {

@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsDateString, IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
+// input for instructor to enroll the target course
 @InputType()
 export class CheckInDto {
   @IsDefined()
@@ -36,6 +37,7 @@ export class CheckInDto {
   userId: string;
 }
 
+// input for instructor to remove student from target course
 @InputType()
 export class DeleteStudentDto {
   @IsNotEmpty()
@@ -46,6 +48,16 @@ export class DeleteStudentDto {
 
   @IsNotEmpty()
   @IsString()
+  @Field()
+  courseId: string;
+}
+
+// input for instructor to cancel the course, and list all students from target course
+@InputType()
+export class CourseFunctionDto {
+  @IsNotEmpty()
+  @IsString()
+  @IsDefined()
   @Field()
   courseId: string;
 }

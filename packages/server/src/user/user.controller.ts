@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // update user information
   @Put('/update')
   async updateUser(@Body() updateUser: UpdateUserDto) {
     return await this.userService.updateUser(updateUser);

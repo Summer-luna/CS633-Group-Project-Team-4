@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString, IsEmail } from 'class-validator';
 
+// user input for updating their information
 @InputType()
 export class UpdateUserDto {
   @IsDefined()

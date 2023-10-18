@@ -67,14 +67,6 @@ export class UpdateCourseDto {
 }
 
 @InputType()
-export class DeleteCourseDto {
-  @IsDefined()
-  @IsString()
-  @Field()
-  id: string;
-}
-
-@InputType()
 export class GetCourseByNameDto {
   @IsDefined()
   @IsNotEmpty()
