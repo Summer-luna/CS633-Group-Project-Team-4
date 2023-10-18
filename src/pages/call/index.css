@@ -1,0 +1,15 @@
+.callP{
+  font-weight: 700;
+  margin: 10px 0 100px 0;
+}
+.callcontent{
+  width: 46%;
+  background-color: #f5f7f8;
+  height: 400px;
+  margin: 0 auto;
+  position: relative;
+  opacity: 0.8;
+  /* padding: 100px 150px 0; */
+  padding-top: 100px;
+  color: #000;
+}

@@ -1,0 +1,106 @@
+.green {
+  background-color: #aaff67!important;
+  color: #000!important;
+}
+
+.orange {
+  background-color: #fcca7e!important;
+  color: #000!important;
+}
+
+.red {
+  background-color: #fe8989!important;
+  color: #000!important;
+}
+.attendp{
+  margin-right: 20px;
+}
+.attend{
+  display: flex;
+  align-items: center;
+  margin: 10px 0 20px;
+  font-weight: 700;
+}
+.attend button{
+  height: 30px;
+  font-size: 14px;
+  padding: 0 30px;
+  background-color: #265792;
+}
+.attendtime{
+  padding: 0 30px;
+  font-weight: 700;
+  border-bottom: 1px solid #265792;
+}
+
+.content .info li {
+  display: flex;
+  width: 100%;
+  /* width: 25%; */
+}
+
+.content .info li div {
+  width: 25%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 80px;
+}
+
+.operate button {
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: 700;
+  width: 100px;
+  height: 30px;
+  color: #f5f7f8;
+  background-color: #265792;
+  border: none;
+  margin-right: 14px;
+  cursor: pointer;
+  line-height: normal;
+}
+
+.header p button {
+  border-radius: 5px;
+  font-weight: 700;
+  width: 100px;
+  height: 30px;
+  color: #f5f7f8;
+  background-color: #265792;
+  border: none;
+  margin-right: 14px;
+  cursor: pointer;
+}
+
+.operate {
+  color: #265792;
+  display: flex;
+  align-items: center;
+}
+
+.operate i {
+  margin-right: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.el-icon-close:before {
+  content: none;
+}
+
+.el-dialog__header {
+  padding: 0;
+}
+
+.demo-input-suffix {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.demo-input-suffix p {
+  width: 80px;
+}
