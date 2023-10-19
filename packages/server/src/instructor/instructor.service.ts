@@ -48,7 +48,16 @@ export class InstructorService {
         courseId: courseInform.courseId
       },
       include: {
-        User: true
+        User: {
+          select: {
+            id: true,
+            email: true,
+            lastName: true,
+            firstName: true,
+            buID: true,
+            role: true
+          }
+        }
       }
     });
     for (let i = 0; i < studentList.length; i++) {
