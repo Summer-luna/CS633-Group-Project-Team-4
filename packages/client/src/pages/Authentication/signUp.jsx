@@ -50,23 +50,23 @@ export const SignUp = () => {
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName" label="First Name" autoFocus />
+              <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName" label="First Name" autoFocus variant="filled" />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="family-name" />
+              <TextField required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="family-name" variant="filled" />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField helperText="Please Include the first letter." required fullWidth id="buid" label="BU ID" name="buid" autoComplete="bu-id" />
+              <TextField helperText="Please Include the first letter." required fullWidth id="buid" label="BU ID" name="buid" autoComplete="bu-id" variant="filled" />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+              <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" variant="filled" />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" />
+              <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" variant="filled" />
             </Grid>
 
             <Grid item xs={12}>
