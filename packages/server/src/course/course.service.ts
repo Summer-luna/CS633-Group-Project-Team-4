@@ -7,7 +7,6 @@ import { Course, Prisma } from '@prisma/client';
 export class CourseService {
   constructor(private prisma: PrismaService) {}
 
-  // the function which can add course into the database (working with "chechIn" function in instroctor.service)
   async addCourse(course: Prisma.CourseUncheckedCreateInput): Promise<Course> {
     const courseCount = await this.prisma.course.count({
       where: {
@@ -19,9 +18,12 @@ export class CourseService {
       throw new Error('Course already exist in the database.');
     }
 
+    const joinCode = await this.generateRandomCode();
+
     return this.prisma.course.create({
       data: {
         name: course.name,
+        joinCode: joinCode,
         description: course.description,
         location: course.location,
         semesterId: course.semesterId,

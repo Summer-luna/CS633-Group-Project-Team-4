@@ -12,7 +12,6 @@ export class CourseController {
     return await this.courseService.updateCourse(updateCourse);
   }
 
-  // search the target course by couese's name
   @Get('/getbyname')
   async getCourseByName(@Body() getCourse: GetCourseByNameDto) {
     return await this.courseService.getCourseByName(getCourse);
