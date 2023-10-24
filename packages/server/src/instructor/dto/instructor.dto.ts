@@ -35,6 +35,14 @@ export class CheckInDto {
   @IsString()
   @Field()
   userId: string;
+
+  @IsNumber()
+  @Field()
+  joinCode: number;
+
+  @IsNumber()
+  @Field()
+  attendanceCode: number;
 }
 
 // input for instructor to remove student from target course
@@ -60,4 +68,33 @@ export class CourseFunctionDto {
   @IsDefined()
   @Field()
   courseId: string;
+}
+
+// input to set attendence code for target course
+@InputType()
+export class SetAttendenceCodeDto {
+  @IsDefined()
+  @IsString()
+  @Field()
+  courseId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  attendanceCode: string;
+}
+
+// input to edit student's attendence state
+@InputType()
+export class EditAttendenceStateDto {
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  id: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Field()
+  attendanceType: number;
 }

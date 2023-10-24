@@ -5,10 +5,10 @@ import { IsDateString, IsDefined, IsNotEmpty, IsNumber, IsString } from 'class-v
 @InputType()
 export class CheckInDto {
   @IsDefined()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @Field()
-  courseId: string;
+  joinCode: number;
 
   @IsNotEmpty()
   @IsString()
@@ -21,4 +21,17 @@ export class FindCourseDto {
   @IsString()
   @Field()
   name: string;
+}
+
+@InputType()
+export class TakeAttendenceDto {
+  @IsDefined()
+  @IsString()
+  @IsNotEmpty()
+  @Field()
+  courseId: string;
+
+  @IsString()
+  @Field()
+  userId: string;
 }

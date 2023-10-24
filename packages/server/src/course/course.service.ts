@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GetCourseByNameDto, GetCourseListByUserDto, UpdateCourseDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
+import * as randomatic from 'randomatic';
 
 @Injectable()
 export class CourseService {
@@ -28,7 +29,8 @@ export class CourseService {
         location: course.location,
         semesterId: course.semesterId,
         startDate: course.startDate,
-        endDate: course.endDate
+        endDate: course.endDate,
+        attendanceCode: null
       }
     });
   }
@@ -102,5 +104,10 @@ export class CourseService {
       }
     }
     return courseIdList;
+  }
+
+  async generateRandomCode(): Promise<number> {
+    // Generate a random six-digit code
+    return randomatic('0', 6);
   }
 }

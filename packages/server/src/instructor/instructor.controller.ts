@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Delete, Get } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Get, Put } from '@nestjs/common';
 import { InstructorService } from './instructor.service';
-import { CourseFunctionDto, CheckInDto, DeleteStudentDto } from './dto/instructor.dto';
+import { CourseFunctionDto, CheckInDto, DeleteStudentDto, EditAttendenceStateDto } from './dto/instructor.dto';
 import { UserOnCourse } from '@prisma/client';
 
 @Controller('instructor')
@@ -25,5 +25,9 @@ export class InstructorController {
   @Get('/getstudentlistbycourse')
   async getCourseListByUser(@Body() courseInform: CourseFunctionDto) {
     return await this.instructorService.getStudentListFromCourse(courseInform);
+  }
+  @Put('/update')
+  async updateCourse(@Body() inform: EditAttendenceStateDto) {
+    return await this.instructorService.editAttendenceState(inform);
   }
 }

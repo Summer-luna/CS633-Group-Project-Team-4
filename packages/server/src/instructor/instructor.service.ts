@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserOnCourse } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CourseService } from 'src/course/course.service';
-import { CourseFunctionDto, CheckInDto, DeleteStudentDto } from './dto/instructor.dto';
+import { CourseFunctionDto, CheckInDto, DeleteStudentDto, SetAttendenceCodeDto, EditAttendenceStateDto } from './dto/instructor.dto';
 
 @Injectable()
 export class InstructorService {
@@ -66,5 +66,22 @@ export class InstructorService {
       }
     }
     return studentList;
+  }
+
+  // set attendence code for student
+  async setAttendenceCode(inform: SetAttendenceCodeDto) {
+    if (inform.attendanceCode.length != 4) return 'Attendence Code should be 4 characters with digits or letters';
+  }
+
+  //edit student attendence state
+  async editAttendenceState(inform: EditAttendenceStateDto) {
+    return await this.prisma.attendance.update({
+      where: {
+        id: inform.id
+      },
+      data: {
+        attendanceType: inform.attendanceType
+      }
+    });
   }
 }
