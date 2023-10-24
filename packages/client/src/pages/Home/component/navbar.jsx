@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar, Box, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText } from '@mui/material';
+import { Avatar, Box, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText, Stack } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '../../../constants/Paths.js';
 import { useNavigate } from 'react-router-dom';
@@ -73,50 +73,43 @@ export const Navbar = () => {
   const open = Boolean(avatarDrop);
   const id = open ? 'avatar-popover' : undefined;
   return (
-    <Grid
-      container
+    <Stack
       direction="row"
       justifyContent="space-between"
       alignItems="center"
       sx={{
         borderBottom: '1px solid black',
-        marginBottom: 6
+        marginBottom: 6,
+        paddingBottom: 2
       }}
     >
-      <Grid item>
-        <Box
+      <Stack
+        direction="row"
+        gap={5}
+        sx={{
+          width: 250,
+          height: 50,
+          backgroundColor: 'primary.main',
+          borderRadius: '6px',
+          alignItems: 'center'
+        }}
+      >
+        <Typography
+          variant="h4"
           sx={{
-            width: 250,
-            height: 50,
-            backgroundColor: 'primary.main',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '6px'
+            color: 'white'
           }}
         >
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{
-              color: 'white'
-            }}
-          >
-            ClassGuardian
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid item>
-        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
-          <Grid item>
-            <Link href={Paths.HOME} variant="h5">
-              Home
-            </Link>
-          </Grid>
-          {signInDisplay()}
-          {avatarDisplay()}
-        </Grid>
-      </Grid>
-    </Grid>
+          ClassGuardian
+        </Typography>
+        <Link href={Paths.HOME} variant="h5" sx={{ textDecoration: 'none', color: 'black' }}>
+          Home
+        </Link>
+      </Stack>
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={3}>
+        {signInDisplay()}
+        {avatarDisplay()}
+      </Stack>
+    </Stack>
   );
 };

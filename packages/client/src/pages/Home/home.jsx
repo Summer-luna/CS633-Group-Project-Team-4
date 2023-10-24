@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { axiosInstance } from '../../utils/axioInstance.js';
 
 export const Home = () => {
   const [courses, setCourses] = useState([]);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [user, setUser] = useState({});
   const { token, decoded_token } = useAuth();
   const fullName = `${user.firstName} ${user.lastName}`;
@@ -27,8 +28,6 @@ export const Home = () => {
 
     getCourses();
   }, [decoded_token]);
-
-  const [addDialogOpen, setAddDialogOpen] = React.useState(false);
 
   const handleAddDialogOpen = () => {
     setAddDialogOpen(true);
@@ -75,9 +74,11 @@ export const Home = () => {
         </Grid>
       </Grid>
 
-      {courses.map((course) => {
-        return <CourseCard key={course.courseId} courseName={course.Course.name} />;
-      })}
+      <Stack flexWrap="wrap" direction="row" gap={5} sx={{ mt: 7 }}>
+        {courses.map((course) => {
+          return <CourseCard key={course.courseId} courseName={course.Course.name} courseId={course.courseId} />;
+        })}
+      </Stack>
     </Grid>
   );
 };

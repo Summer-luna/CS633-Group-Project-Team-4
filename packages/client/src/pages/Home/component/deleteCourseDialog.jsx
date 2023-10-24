@@ -1,8 +1,23 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import * as React from 'react';
+import { axiosInstance } from '../../../utils/axioInstance.js';
+import { useAuth } from '../../../context/auth.context.jsx';
 
-export const DeleteCourseDialog = (props) => {
-  const { onClose, open } = props;
+export const DeleteCourseDialog = ({ onClose, open, courseId }) => {
+  const { decoded_token } = useAuth();
+
+  const handleDelete = async () => {
+    const res = await axiosInstance.delete(`/instructor/course/delete`, {
+      data: {
+        courseId: courseId,
+        userId: decoded_token.id
+      }
+    });
+
+    if (res.data) {
+      onClose();
+      window.location.reload(false);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -12,13 +27,13 @@ export const DeleteCourseDialog = (props) => {
       </DialogContent>
       <DialogActions>
         <Button
+          onClick={handleDelete}
           variant="contained"
           sx={{
             background: '#bc3c3c',
             color: 'white',
             fontWeight: 'bold'
           }}
-          onClick={onClose}
         >
           Delete
         </Button>
