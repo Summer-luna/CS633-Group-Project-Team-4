@@ -33,6 +33,7 @@ export class UserService {
       }
     });
   }
+
   async validUserData(inputEmail: string, inputPassword: string): Promise<User> {
     const targetUser = await this.prisma.user.findUnique({
       where: {
@@ -42,5 +43,24 @@ export class UserService {
     const checker = await bcrypt.compare(inputPassword, targetUser.password);
     if (targetUser && checker) return targetUser;
     return null;
+  }
+
+  async getUserByIdWithCourses(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        id
+      },
+      include: {
+        courses: {
+          include: {
+            Course: {
+              include: {
+                semester: true
+              }
+            }
+          }
+        }
+      }
+    });
   }
 }

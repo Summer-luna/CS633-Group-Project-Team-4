@@ -9,7 +9,10 @@ export class CourseModel {
   name: string;
 
   @Field()
-  joinCode: number;
+  joinCode: string;
+
+  @Field()
+  attendanceCode: string;
 
   @Field()
   description: string;
