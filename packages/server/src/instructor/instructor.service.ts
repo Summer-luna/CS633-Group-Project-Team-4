@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserOnCourse } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CourseService } from 'src/course/course.service';
-import { CheckInDto } from './dto/instructor.dto';
 import { AddCourseDto, DeleteCourseDto } from '../course/dto/course.dto';
 import { CourseModel } from '../course/model/course.model';
 

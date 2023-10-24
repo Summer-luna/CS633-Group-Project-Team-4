@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar, Box, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText, Stack } from '@mui/material';
+import { Avatar, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText, Stack } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '../../../constants/Paths.js';
 import { useNavigate } from 'react-router-dom';

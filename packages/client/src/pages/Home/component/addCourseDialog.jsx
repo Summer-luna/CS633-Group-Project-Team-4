@@ -42,8 +42,10 @@ export const AddCourseDialog = (props) => {
       }
     );
 
-    handleClose();
-    window.location.reload(false);
+    if (res.data) {
+      handleClose();
+      window.location.reload(false);
+    }
   };
 
   return (

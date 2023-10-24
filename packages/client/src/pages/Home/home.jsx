@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
 import { useEffect, useState } from 'react';
