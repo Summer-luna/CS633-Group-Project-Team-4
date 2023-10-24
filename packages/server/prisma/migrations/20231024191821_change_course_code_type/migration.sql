@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Course" ALTER COLUMN "joinCode" SET DATA TYPE TEXT,
+ALTER COLUMN "attendanceCode" SET DATA TYPE TEXT;

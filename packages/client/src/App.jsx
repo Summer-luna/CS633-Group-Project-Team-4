@@ -7,23 +7,27 @@ import { SignIn } from './pages/Authentication/signIn.jsx';
 import { AuthProvider } from './context/auth.context.jsx';
 import { AuthGuard } from './pages/Authentication/auth.guard.jsx';
 import { Logout } from './pages/Authentication/logout.jsx';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path={Paths.HOME} element={<Layout />}>
-            <Route element={<AuthGuard />}>
-              <Route path={Paths.HOME} element={<Home />} />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Router>
+        <AuthProvider>
+          <Routes>
+            <Route path={Paths.HOME} element={<Layout />}>
+              <Route element={<AuthGuard />}>
+                <Route path={Paths.HOME} element={<Home />} />
+              </Route>
+              <Route path={Paths.SIGNUP} element={<SignUp />} />
+              <Route path={Paths.LOGIN} element={<SignIn />} />
+              <Route path={Paths.LOGOUT} element={<Logout />} />
             </Route>
-            <Route path={Paths.SIGNUP} element={<SignUp />} />
-            <Route path={Paths.LOGIN} element={<SignIn />} />
-            <Route path={Paths.LOGOUT} element={<Logout />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
-    </Router>
+          </Routes>
+        </AuthProvider>
+      </Router>
+    </LocalizationProvider>
   );
 }
 

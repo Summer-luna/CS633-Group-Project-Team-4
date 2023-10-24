@@ -24,8 +24,8 @@ model User {
 
 model Course {
   id             String         @id @default(uuid())
-  joinCode       Int            @unique
-  attendanceCode Int?           @unique
+  joinCode       String         @unique
+  attendanceCode String?        @unique
   name           String
   description    String?
   location       String?

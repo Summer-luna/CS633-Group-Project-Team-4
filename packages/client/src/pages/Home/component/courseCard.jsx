@@ -1,16 +1,26 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useState } from 'react';
+import { DeleteCourseDialog } from './deleteCourseDialog.jsx';
 
-export const CourseCard = (props) => {
+export const CourseCard = ({ courseName, courseId }) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const handleDeleteDialogOpen = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
+
   return (
-    <Grid
-      item
-      xs={5}
+    <Box
+      id={courseId}
       sx={{
-        paddingTop: 14,
-        paddingBottom: 14,
+        minWidth: 700,
         border: '1px solid #265792',
         borderRadius: 2,
-        margin: 2,
         backgroundColor: 'rgba(255,255,255,0.2)',
         ':hover': {
           backgroundColor: 'rgba(255,255,255,0.3)',
@@ -18,9 +28,18 @@ export const CourseCard = (props) => {
         }
       }}
     >
-      <Typography component="h1" variant="h4" align="center">
-        {props.courseName}
-      </Typography>
-    </Grid>
+      <Box>
+        <Button onClick={handleDeleteDialogOpen}>
+          <DeleteForeverIcon fontSize="large" sx={{ color: '#bc3c3c' }} />
+        </Button>
+        <DeleteCourseDialog open={deleteDialogOpen} onClose={handleDeleteDialogClose} courseId={courseId} />
+      </Box>
+
+      <Box sx={{ paddingBottom: 12 }}>
+        <Typography component="h1" variant="h4" align="center">
+          {courseName}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
