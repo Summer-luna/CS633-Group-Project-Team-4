@@ -1,14 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  Grid,
-  InputLabel, MenuItem, Select,
-  TextField,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import * as React from 'react';
 
@@ -69,7 +59,9 @@ export const AddCourseDialog = (props) => {
 
           <Grid item xs={12} sx={{ minWidth: '25vw' }} alignItems="center">
             <FormControl fullWidth>
-              <InputLabel id="semester-select-label" sx={{ margin: 2 }}>Semester</InputLabel>
+              <InputLabel id="semester-select-label" sx={{ margin: 2 }}>
+                Semester
+              </InputLabel>
               <Select labelId="semester-select-label" id="semester-selection" value={semester} label="Semester" onChange={handleChange} sx={{ margin: 2 }} fullWidth>
                 <MenuItem value={0}>Fall</MenuItem>
                 <MenuItem value={1}>Spring</MenuItem>
