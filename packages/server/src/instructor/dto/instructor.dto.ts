@@ -35,3 +35,17 @@ export class CheckInDto {
   @Field()
   userId: string;
 }
+
+@InputType()
+export class DeleteCourseDto {
+  @IsNotEmpty()
+  @IsString()
+  @IsDefined()
+  @Field()
+  userId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  courseId: string;
+}

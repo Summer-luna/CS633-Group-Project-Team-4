@@ -6,6 +6,11 @@ export class AddCourseDto {
   @IsDefined()
   @IsString()
   @Field()
+  userId: string;
+
+  @IsDefined()
+  @IsString()
+  @Field()
   name: string;
 
   @IsOptional()
@@ -71,7 +76,12 @@ export class DeleteCourseDto {
   @IsDefined()
   @IsString()
   @Field()
-  id: string;
+  userId: string;
+
+  @IsDefined()
+  @IsString()
+  @Field()
+  courseId: string;
 }
 
 @InputType()

@@ -3,12 +3,13 @@ import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
 import * as randomatic from 'randomatic';
+import { UserOnCourseModel } from './model/course.model';
 
 @Injectable()
 export class CourseService {
   constructor(private prisma: PrismaService) {}
 
-  async addCourse(course: AddCourseDto): Promise<Course> {
+  async addCourse(course: AddCourseDto): Promise<UserOnCourseModel> {
     // Generate a new join code and attendance code if the generated code already exists in the database
     const joinCode = await this.generateUniqueJoinCode(6);
     const attendanceCode = await this.generateUniqueAttendanceCode(4);
@@ -23,7 +24,7 @@ export class CourseService {
       throw new Error('Course already exist in the database.');
     }
 
-    return this.prisma.course.create({
+    const newCourse = await this.prisma.course.create({
       data: {
         name: course.name,
         attendanceCode: attendanceCode,
@@ -33,6 +34,13 @@ export class CourseService {
         semesterId: course.semesterId,
         startDate: course.startDate,
         endDate: course.endDate
+      }
+    });
+
+    return this.prisma.userOnCourse.create({
+      data: {
+        userId: course.userId,
+        courseId: newCourse.id
       }
     });
   }
@@ -73,10 +81,21 @@ export class CourseService {
     });
   }
 
-  async deleteCourse(course: DeleteCourseDto) {
+  async deleteCourse(input: DeleteCourseDto): Promise<Course> {
+    console.log(input);
+
+    await this.prisma.userOnCourse.delete({
+      where: {
+        courseId_userId: {
+          courseId: input.courseId,
+          userId: input.userId
+        }
+      }
+    });
+
     return this.prisma.course.delete({
       where: {
-        id: course.id
+        id: input.courseId
       }
     });
   }

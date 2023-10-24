@@ -29,3 +29,15 @@ export class CourseModel {
   @Field()
   endDate: Date;
 }
+
+@ObjectType()
+export class UserOnCourseModel {
+  @Field()
+  userId: string;
+
+  @Field()
+  courseId: string;
+
+  @Field()
+  enrolled: Date;
+}
