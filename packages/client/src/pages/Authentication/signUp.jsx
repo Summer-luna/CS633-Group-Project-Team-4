@@ -6,7 +6,7 @@ import { Paths } from '../../constants/Paths.js';
 import { useAuth } from '../../context/auth.context.jsx';
 
 export const SignUp = () => {
-  const [role, setRole] = React.useState('student');
+  const [role, setRole] = React.useState(0);
   const navigate = useNavigate();
   const { setToken } = useAuth();
 
@@ -87,7 +87,7 @@ export const SignUp = () => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               You have an account?
-              <Link href="/signin" variant="body1">
+              <Link href={Paths.LOGIN} variant="body1">
                 Sign In Here
               </Link>
             </Grid>

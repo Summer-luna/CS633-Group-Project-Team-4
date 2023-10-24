@@ -54,7 +54,7 @@ export const SignIn = () => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               New to the ClassGuardian?
-              <Link href="/signup" variant="body1">
+              <Link href={Paths.SIGNUP} variant="body1">
                 Sign Up Here
               </Link>
             </Grid>

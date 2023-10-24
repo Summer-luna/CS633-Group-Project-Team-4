@@ -1,5 +1,7 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
+import { AddCourseDialog } from './component/addCourseDialog.jsx';
+import * as React from 'react';
 
 export const Home = () => {
   const courses = [
@@ -20,6 +22,16 @@ export const Home = () => {
       name: 'Course 4'
     }
   ];
+
+  const [addDialogOpen, setAddDialogOpen] = React.useState(false);
+
+  const handleAddDialogOpen = () => {
+    setAddDialogOpen(true);
+  };
+
+  const handleAddDialogClose = () => {
+    setAddDialogOpen(false);
+  };
 
   return (
     <Grid container justifyContent="space-between">
@@ -47,22 +59,11 @@ export const Home = () => {
                     color: 'white',
                     fontWeight: 'bold'
                   }}
+                  onClick={handleAddDialogOpen}
                 >
                   Add Course
                 </Button>
-              </Grid>
-
-              <Grid item>
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: '#265792',
-                    color: 'white',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Remove Course
-                </Button>
+                <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} />
               </Grid>
             </Grid>
           </Grid>
