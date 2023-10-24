@@ -53,7 +53,11 @@ export class UserService {
       include: {
         courses: {
           include: {
-            Course: true
+            Course: {
+              include: {
+                semester: true
+              }
+            }
           }
         }
       }
