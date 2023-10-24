@@ -6,11 +6,6 @@ export class AddCourseDto {
   @IsDefined()
   @IsString()
   @Field()
-  userId: string;
-
-  @IsDefined()
-  @IsString()
-  @Field()
   name: string;
 
   @IsOptional()
@@ -72,23 +67,19 @@ export class UpdateCourseDto {
 }
 
 @InputType()
-export class DeleteCourseDto {
-  @IsDefined()
-  @IsString()
-  @Field()
-  userId: string;
-
-  @IsDefined()
-  @IsString()
-  @Field()
-  courseId: string;
-}
-
-@InputType()
 export class GetCourseByNameDto {
   @IsDefined()
   @IsNotEmpty()
   @IsString()
   @Field()
   name: string;
+}
+
+@InputType()
+export class GetCourseListByUserDto {
+  @IsNotEmpty()
+  @IsString()
+  @IsDefined()
+  @Field()
+  userId: string;
 }
