@@ -1,4 +1,4 @@
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
 import { useEffect, useReducer, useState } from 'react';
@@ -47,41 +47,32 @@ export const Home = () => {
   };
 
   return (
-    <Grid container justifyContent="space-between">
-      <Grid item xs={12}>
-        <Grid container direction="row" justifyContent="space-between" alignItems="center">
-          <Grid item alignItems="center">
-            <Typography
-              component="h1"
-              variant="h3"
-              sx={{
-                color: '#265792'
-              }}
-            >
-              {fullName}
-            </Typography>
-          </Grid>
-
-          <Grid item>
-            <Grid container direction="row" justifyContent="space-between" alignItems="center">
-              <Grid item sx={{ paddingRight: 2 }}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: '#265792',
-                    color: 'white',
-                    fontWeight: 'bold'
-                  }}
-                  onClick={handleAddDialogOpen}
-                >
-                  Add Course
-                </Button>
-                <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} addCourse={addCourse} />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+    <Stack>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography
+          component="h1"
+          variant="h3"
+          sx={{
+            color: '#265792'
+          }}
+        >
+          {fullName}
+        </Typography>
+        <Box>
+          <Button
+            variant="contained"
+            sx={{
+              background: '#265792',
+              color: 'white',
+              fontWeight: 'bold'
+            }}
+            onClick={handleAddDialogOpen}
+          >
+            Add Course
+          </Button>
+          <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} addCourse={addCourse} />
+        </Box>
+      </Stack>
 
       <Stack flexWrap="wrap" direction="row" gap={5} sx={{ mt: 7 }}>
         {courses &&
@@ -89,6 +80,6 @@ export const Home = () => {
             return <CourseCard key={course.courseId} courseName={course?.Course?.name} courseId={course.courseId} deleteCourse={deleteCourse} />;
           })}
       </Stack>
-    </Grid>
+    </Stack>
   );
 };
