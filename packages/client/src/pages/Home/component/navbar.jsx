@@ -1,12 +1,12 @@
-import * as React from 'react';
 import { Avatar, Button, Grid, Link, Typography, Popover, ListItem, List, ListItemButton, ListItemText, Stack } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '../../../constants/Paths.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/auth.context.jsx';
+import { useState } from 'react';
 
 export const Navbar = () => {
-  const [avatarDrop, setAvatarDrop] = React.useState(null);
+  const [avatarDrop, setAvatarDrop] = useState(null);
   const navigate = useNavigate();
   const { token } = useAuth();
 
@@ -87,17 +87,18 @@ export const Navbar = () => {
         direction="row"
         gap={5}
         sx={{
-          width: 250,
-          height: 50,
-          backgroundColor: 'primary.main',
-          borderRadius: '6px',
           alignItems: 'center'
         }}
       >
         <Typography
           variant="h4"
           sx={{
-            color: 'white'
+            color: 'white',
+            backgroundColor: 'primary.main',
+            width: 250,
+            height: 50,
+            borderRadius: '6px',
+            textAlign: 'center'
           }}
         >
           ClassGuardian
