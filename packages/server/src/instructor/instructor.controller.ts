@@ -14,7 +14,7 @@ export class InstructorController {
   @UseGuards(AuthGuard)
   @Roles(Role.Professor)
   @Post('/course/add')
-  async signUp(@Body() course: AddCourseDto): Promise<UserOnCourse> {
+  async createCourse(@Body() course: AddCourseDto): Promise<UserOnCourse> {
     return this.instructorService.createCourse(course);
   }
 
