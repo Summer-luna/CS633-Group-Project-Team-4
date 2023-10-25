@@ -9,6 +9,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// 0 is student
+// 1 is professor
 model User {
   id         String         @id @default(uuid())
   email      String         @unique
