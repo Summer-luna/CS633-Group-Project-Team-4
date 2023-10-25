@@ -41,6 +41,9 @@ export class CourseService {
       data: {
         userId: course.userId,
         courseId: newCourse.id
+      },
+      include: {
+        Course: true
       }
     });
   }

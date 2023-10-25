@@ -2,20 +2,23 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { useAuth } from '../../../context/auth.context.jsx';
 
-export const DeleteCourseDialog = ({ onClose, open, courseId }) => {
-  const { decoded_token } = useAuth();
+export const DeleteCourseDialog = ({ onClose, open, courseId, deleteCourse }) => {
+  const { token, decoded_token } = useAuth();
 
   const handleDelete = async () => {
     const res = await axiosInstance.delete(`/instructor/course/delete`, {
       data: {
         courseId: courseId,
         userId: decoded_token.id
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
       }
     });
 
     if (res.data) {
+      deleteCourse(courseId);
       onClose();
-      window.location.reload(false);
     }
   };
 

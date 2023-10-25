@@ -1,16 +1,17 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { useAuth } from '../../context/auth.context.jsx';
 import { axiosInstance } from '../../utils/axioInstance.js';
+import { Actions, courseReducer } from '../../reducer/courseReducer.jsx';
 
 export const Home = () => {
-  const [courses, setCourses] = useState([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [user, setUser] = useState({});
   const { token, decoded_token } = useAuth();
   const fullName = `${user.firstName} ${user.lastName}`;
+  const [courses, dispatch] = useReducer(courseReducer, [], () => []);
 
   useEffect(() => {
     const getCourses = async () => {
@@ -22,12 +23,20 @@ export const Home = () => {
         });
 
         setUser(res.data);
-        setCourses(res.data.courses);
+        dispatch({ type: Actions.SET_COURSES, payload: res.data.courses });
       }
     };
 
     getCourses();
   }, [decoded_token]);
+
+  const addCourse = (course) => {
+    dispatch({ type: Actions.ADD_COURSE, payload: course });
+  };
+
+  const deleteCourse = (courseId) => {
+    dispatch({ type: Actions.DELETE_COURSE, payload: courseId });
+  };
 
   const handleAddDialogOpen = () => {
     setAddDialogOpen(true);
@@ -67,7 +76,7 @@ export const Home = () => {
                 >
                   Add Course
                 </Button>
-                <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} />
+                <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} addCourse={addCourse} />
               </Grid>
             </Grid>
           </Grid>
@@ -75,9 +84,10 @@ export const Home = () => {
       </Grid>
 
       <Stack flexWrap="wrap" direction="row" gap={5} sx={{ mt: 7 }}>
-        {courses.map((course) => {
-          return <CourseCard key={course.courseId} courseName={course.Course.name} courseId={course.courseId} />;
-        })}
+        {courses &&
+          courses.map((course) => {
+            return <CourseCard key={course.courseId} courseName={course?.Course?.name} courseId={course.courseId} deleteCourse={deleteCourse} />;
+          })}
       </Stack>
     </Grid>
   );
