@@ -1,6 +1,7 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
+import { AddStudentCourseDialog } from './component/addStudentCourseDialog.jsx';
 import { useEffect, useReducer, useState } from 'react';
 import { useAuth } from '../../context/auth.context.jsx';
 import { axiosInstance } from '../../utils/axioInstance.js';
@@ -8,6 +9,7 @@ import { Actions, courseReducer } from '../../reducer/courseReducer.jsx';
 
 export const Home = () => {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [studentAddOpen, setStudentAddOpen] = useState(false);
   const [user, setUser] = useState({});
   const { token, decoded_token } = useAuth();
   const fullName = `${user.firstName} ${user.lastName}`;
@@ -30,6 +32,14 @@ export const Home = () => {
     getCourses();
   }, [decoded_token]);
 
+  const handleOpen = () => {
+    if (user.role === 1) {
+      handleAddDialogOpen();
+    } else {
+      handleStudentAddOpen();
+    }
+  };
+
   const addCourse = (course) => {
     dispatch({ type: Actions.ADD_COURSE, payload: course });
   };
@@ -44,6 +54,14 @@ export const Home = () => {
 
   const handleAddDialogClose = () => {
     setAddDialogOpen(false);
+  };
+
+  const handleStudentAddOpen = () => {
+    setStudentAddOpen(true);
+  };
+
+  const handleStudentAddClose = () => {
+    setStudentAddOpen(false);
   };
 
   return (
@@ -66,14 +84,14 @@ export const Home = () => {
               color: 'white',
               fontWeight: 'bold'
             }}
-            onClick={handleAddDialogOpen}
+            onClick={handleOpen}
           >
             Add Course
           </Button>
           <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} addCourse={addCourse} />
+          <AddStudentCourseDialog open={studentAddOpen} onClose={handleStudentAddClose} />
         </Box>
       </Stack>
-
       <Stack flexWrap="wrap" direction="row" gap={5} sx={{ mt: 7 }}>
         {courses &&
           courses.map((course) => {
