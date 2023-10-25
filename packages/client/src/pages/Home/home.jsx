@@ -1,6 +1,7 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
+import { AddCourseDialogStudent } from './component/addCourseDialog(student).jsx';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/auth.context.jsx';
 import { axiosInstance } from '../../utils/axioInstance.js';
@@ -8,6 +9,7 @@ import { axiosInstance } from '../../utils/axioInstance.js';
 export const Home = () => {
   const [courses, setCourses] = useState([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [studentAddOpen, setStudentAddOpen] = useState(false);
   const [user, setUser] = useState({});
   const { token, decoded_token } = useAuth();
   const fullName = `${user.firstName} ${user.lastName}`;
@@ -29,12 +31,28 @@ export const Home = () => {
     getCourses();
   }, [decoded_token]);
 
+  const handleOpen = () => {
+    if (user.role === 1) {
+      handleAddDialogOpen();
+    } else {
+      handleStudentAddOpen();
+    }
+  };
+
   const handleAddDialogOpen = () => {
     setAddDialogOpen(true);
   };
 
   const handleAddDialogClose = () => {
     setAddDialogOpen(false);
+  };
+
+  const handleStudentAddOpen = () => {
+    setStudentAddOpen(true);
+  };
+
+  const handleStudentAddClose = () => {
+    setStudentAddOpen(false);
   };
 
   return (
@@ -63,11 +81,12 @@ export const Home = () => {
                     color: 'white',
                     fontWeight: 'bold'
                   }}
-                  onClick={handleAddDialogOpen}
+                  onClick={handleOpen}
                 >
                   Add Course
                 </Button>
                 <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} />
+                <AddCourseDialogStudent open={studentAddOpen} onClose={handleStudentAddClose} />
               </Grid>
             </Grid>
           </Grid>

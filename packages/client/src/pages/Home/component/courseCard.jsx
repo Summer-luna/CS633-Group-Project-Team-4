@@ -28,7 +28,14 @@ export const CourseCard = ({ courseName, courseId }) => {
         }
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          paddingBottom: 6,
+          display: 'flex',
+          justifyContent: 'right',
+          alignItems: 'center'
+        }}
+      >
         <Button onClick={handleDeleteDialogOpen}>
           <DeleteForeverIcon fontSize="large" sx={{ color: '#bc3c3c' }} />
         </Button>
