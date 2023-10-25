@@ -1,34 +1,26 @@
-import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, HttpCode, HttpStatus, Request, UseGuards, Put, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
-import { CourseModel, UserOnCourseModel } from './model/course.model';
+import { CourseModel } from './model/course.model';
 
 @Controller('course')
 export class CourseController {
-  constructor(private readonly classService: CourseService) {}
+  constructor(private readonly courseService: CourseService) {}
 
-  @Post('/add')
-  async addCourse(@Body() newClass: AddCourseDto): Promise<UserOnCourseModel> {
-    return this.classService.addCourse(newClass);
-  }
-
+  // update the course information
   @Put('/update')
-  async updateCourse(@Body() updateCourse: UpdateCourseDto): Promise<CourseModel> {
-    return this.classService.updateCourse(updateCourse);
-  }
-
-  @Delete('/delete')
-  async deleteCourse(@Body() deleteCourse: DeleteCourseDto) {
-    return this.classService.deleteCourse(deleteCourse);
+  async updateCourse(@Body() updateCourse: UpdateCourseDto) {
+    return await this.courseService.updateCourse(updateCourse);
   }
 
   @Get('/getbyname')
-  async getCourseByName(@Body() getCourse: GetCourseByNameDto): Promise<CourseModel[]> {
-    return this.classService.getCourseByName(getCourse);
+  async getCourseByName(@Body() getCourse: GetCourseByNameDto) {
+    return await this.courseService.getCourseByName(getCourse);
   }
 
-  @Get('/getall')
-  async getAllCourses() {
-    return this.classService.getAllCourses();
+  // list all course which user enroll(the course which has already been over will not show on the list)
+  @Get('/getbyuser')
+  async getCourseListByUser(@Body() getCourse: GetCourseListByUserDto) {
+    return await this.courseService.getAllCourseByUser(getCourse);
   }
 }
