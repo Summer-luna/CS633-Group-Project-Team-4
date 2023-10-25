@@ -1,33 +1,20 @@
-import { Controller, Post, Body, Delete, Get, Put } from '@nestjs/common';
+import { Controller, Post, Body, Delete } from '@nestjs/common';
 import { InstructorService } from './instructor.service';
-import { CourseFunctionDto, CheckInDto, DeleteStudentDto, EditAttendenceStateDto } from './dto/instructor.dto';
 import { UserOnCourse } from '@prisma/client';
+import { AddCourseDto } from '../course/dto/course.dto';
+import { DeleteCourseDto } from './dto/instructor.dto';
 
 @Controller('instructor')
 export class InstructorController {
   constructor(private readonly instructorService: InstructorService) {}
 
-  @Post('/checkin')
-  async signUp(@Body() instructor: CheckInDto): Promise<UserOnCourse> {
-    return await this.instructorService.checkIn(instructor);
+  @Post('/course/add')
+  async signUp(@Body() course: AddCourseDto): Promise<UserOnCourse> {
+    return this.instructorService.createCourse(course);
   }
 
-  @Delete('/deletestudent')
-  async deleteStudent(@Body() deleteStudent: DeleteStudentDto) {
-    return await this.instructorService.deleteStudent(deleteStudent);
-  }
-
-  @Delete('/deletecourse')
-  async cancelCourse(@Body() courseInform: CourseFunctionDto) {
-    return await this.instructorService.cancelCourse(courseInform);
-  }
-
-  @Get('/getstudentlistbycourse')
-  async getCourseListByUser(@Body() courseInform: CourseFunctionDto) {
-    return await this.instructorService.getStudentListFromCourse(courseInform);
-  }
-  @Put('/update')
-  async updateCourse(@Body() inform: EditAttendenceStateDto) {
-    return await this.instructorService.editAttendenceState(inform);
+  @Delete('/course/delete')
+  async deleteCourse(@Body() input: DeleteCourseDto) {
+    return this.instructorService.deleteCourse(input);
   }
 }

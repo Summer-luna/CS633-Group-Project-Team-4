@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { GetCourseByNameDto, GetCourseListByUserDto, UpdateCourseDto } from './dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Course, Prisma } from '@prisma/client';
 import * as randomatic from 'randomatic';
+import { UserOnCourseModel } from './model/course.model';
 
 @Injectable()
 export class CourseService {
   constructor(private prisma: PrismaService) {}
 
-  async addCourse(course: Prisma.CourseUncheckedCreateInput): Promise<Course> {
+  async addCourse(course: AddCourseDto): Promise<UserOnCourseModel> {
+    // Generate a new join code and attendance code if the generated code already exists in the database
+    const joinCode = await this.generateUniqueJoinCode(6);
+    const attendanceCode = await this.generateUniqueAttendanceCode(4);
+
     const courseCount = await this.prisma.course.count({
       where: {
         OR: [{ name: course.name, semesterId: course.semesterId, startDate: course.startDate, endDate: course.endDate }]
@@ -19,25 +24,49 @@ export class CourseService {
       throw new Error('Course already exist in the database.');
     }
 
-    const joinCode = await this.generateRandomCode();
-
-    return this.prisma.course.create({
+    const newCourse = await this.prisma.course.create({
       data: {
         name: course.name,
+        attendanceCode: attendanceCode,
         joinCode: joinCode,
         description: course.description,
         location: course.location,
         semesterId: course.semesterId,
         startDate: course.startDate,
-        endDate: course.endDate,
-        attendanceCode: null
+        endDate: course.endDate
+      }
+    });
+
+    return this.prisma.userOnCourse.create({
+      data: {
+        userId: course.userId,
+        courseId: newCourse.id
       }
     });
   }
 
-  // function to help instructor update the course information.
+  async checkDuplicateAttendanceCode(attendanceCode: string): Promise<boolean> {
+    const courseAttendanceCodeCount = await this.prisma.course.count({
+      where: {
+        attendanceCode: attendanceCode
+      }
+    });
+
+    return courseAttendanceCodeCount !== 0;
+  }
+
+  async checkDuplicateJoinCode(joinCode: string): Promise<boolean> {
+    const courseJoinCodeCount = await this.prisma.course.count({
+      where: {
+        joinCode: joinCode
+      }
+    });
+
+    return courseJoinCodeCount !== 0;
+  }
+
   async updateCourse(course: Prisma.CourseUncheckedUpdateInput): Promise<Course> {
-    const currentCourse = await this.prisma.course.update({
+    return this.prisma.course.update({
       where: {
         id: course.id.toString()
       },
@@ -50,20 +79,29 @@ export class CourseService {
         endDate: course.endDate
       }
     });
-    return currentCourse;
   }
 
-  async deleteCourse(courseId: string) {
-    await this.prisma.course.delete({
+  async deleteCourse(input: DeleteCourseDto): Promise<Course> {
+    console.log(input);
+
+    await this.prisma.userOnCourse.delete({
       where: {
-        id: courseId
+        courseId_userId: {
+          courseId: input.courseId,
+          userId: input.userId
+        }
+      }
+    });
+
+    return this.prisma.course.delete({
+      where: {
+        id: input.courseId
       }
     });
   }
 
-  // function to search the course by course's name
   async getCourseByName(courseName: GetCourseByNameDto): Promise<Course[]> {
-    const targetCourse = await this.prisma.course.findMany({
+    return this.prisma.course.findMany({
       where: {
         name: courseName.name,
         endDate: {
@@ -71,12 +109,10 @@ export class CourseService {
         }
       }
     });
-    return targetCourse;
   }
 
-  // function to check the detail information of target course (working with "checkIn" function in Instructor.service)
   async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
-    const targetCourse = await this.prisma.course.findFirst({
+    return this.prisma.course.findFirst({
       where: {
         name: course.name,
         semesterId: course.semesterId,
@@ -84,30 +120,42 @@ export class CourseService {
         endDate: course.endDate
       }
     });
-    return targetCourse;
   }
 
-  //this function can help to list all enroll course for target user.
-  //(if the course has already been over, it will not on the result list)
-  async getAllCourseByUser(userId: GetCourseListByUserDto) {
-    const courseIdList = await this.prisma.userOnCourse.findMany({
+  async getAllCourses(): Promise<Course[]> {
+    return this.prisma.course.findMany({
       where: {
-        userId: userId.userId
-      },
-      select: {
-        Course: true
+        endDate: {
+          gt: new Date().toISOString()
+        }
       }
     });
-    for (let i = 0; i < courseIdList.length; i++) {
-      if (courseIdList[i].Course.endDate < new Date()) {
-        courseIdList.splice(i, 1);
-      }
-    }
-    return courseIdList;
   }
 
-  async generateRandomCode(): Promise<number> {
-    // Generate a random six-digit code
-    return randomatic('0', 6);
+  async generateUniqueJoinCode(size: number): Promise<string> {
+    let joinCode = await this.generateRandomCode(size);
+    let isDuplicateJoinCode = true;
+
+    while (isDuplicateJoinCode) {
+      isDuplicateJoinCode = await this.checkDuplicateJoinCode(joinCode);
+      joinCode = await this.generateRandomCode(size);
+    }
+
+    return joinCode;
+  }
+
+  async generateUniqueAttendanceCode(size: number): Promise<string> {
+    let attendanceCode = await this.generateRandomCode(size);
+    let isDuplicateAttendanceCode = true;
+
+    while (isDuplicateAttendanceCode) {
+      isDuplicateAttendanceCode = await this.checkDuplicateAttendanceCode(attendanceCode);
+      attendanceCode = await this.generateRandomCode(size);
+    }
+    return attendanceCode;
+  }
+
+  async generateRandomCode(size: number): Promise<string> {
+    return randomatic('0', size);
   }
 }
