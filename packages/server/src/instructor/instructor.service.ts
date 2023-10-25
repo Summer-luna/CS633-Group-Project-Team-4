@@ -14,6 +14,7 @@ export class InstructorService {
   }
 
   async deleteCourse(input: DeleteCourseDto): Promise<CourseModel> {
+    // delete course
     return this.courseService.deleteCourse(input);
   }
 }
