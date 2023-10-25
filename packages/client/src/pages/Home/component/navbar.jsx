@@ -87,17 +87,18 @@ export const Navbar = () => {
         direction="row"
         gap={5}
         sx={{
-          width: 250,
-          height: 50,
-          backgroundColor: 'primary.main',
-          borderRadius: '6px',
           alignItems: 'center'
         }}
       >
         <Typography
           variant="h4"
           sx={{
-            color: 'white'
+            color: 'white',
+            backgroundColor: 'primary.main',
+            width: 250,
+            height: 50,
+            borderRadius: '6px',
+            textAlign: 'center'
           }}
         >
           ClassGuardian
