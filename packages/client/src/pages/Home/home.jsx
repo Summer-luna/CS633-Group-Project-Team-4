@@ -1,7 +1,7 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import { CourseCard } from './component/courseCard.jsx';
 import { AddCourseDialog } from './component/addCourseDialog.jsx';
-import { AddCourseDialogStudent } from './component/addCourseDialog(student).jsx';
+import { AddStudentCourseDialog } from './component/addStudentCourseDialog.jsx';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/auth.context.jsx';
 import { axiosInstance } from '../../utils/axioInstance.js';
@@ -86,7 +86,7 @@ export const Home = () => {
                   Add Course
                 </Button>
                 <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} />
-                <AddCourseDialogStudent open={studentAddOpen} onClose={handleStudentAddClose} />
+                <AddStudentCourseDialog open={studentAddOpen} onClose={handleStudentAddClose} />
               </Grid>
             </Grid>
           </Grid>

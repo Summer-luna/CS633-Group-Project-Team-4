@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 
-export const AddCourseDialogStudent = (props) => {
+export const AddStudentCourseDialog = (props) => {
   const { open, onClose } = props;
 
   const handleClose = () => {
