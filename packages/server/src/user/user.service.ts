@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -10,7 +9,6 @@ export class UserService {
 
   private readonly SALT_ROUNDS = 15;
 
-  // creating function for new user to sign up their account
   async createUser(newUser: Prisma.UserCreateInput): Promise<User> {
     const userCount = await this.prisma.user.count({
       where: {
@@ -36,7 +34,6 @@ export class UserService {
     });
   }
 
-  // check if user input the correct email and password for log in action
   async validUserData(inputEmail: string, inputPassword: string): Promise<User> {
     const targetUser = await this.prisma.user.findUnique({
       where: {
@@ -48,20 +45,22 @@ export class UserService {
     return null;
   }
 
-  // function to update user information. Both student and instructor can use this function
-  async updateUser(user: UpdateUserDto): Promise<User> {
-    const updateUser = await this.prisma.user.update({
+  async getUserByIdWithCourses(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
       where: {
-        id: user.id
+        id
       },
-      data: {
-        email: user.email,
-        lastName: user.lastName,
-        firstName: user.firstName,
-        buID: user.buID,
-        role: user.role
+      include: {
+        courses: {
+          include: {
+            Course: {
+              include: {
+                semester: true
+              }
+            }
+          }
+        }
       }
     });
-    return updateUser;
   }
 }

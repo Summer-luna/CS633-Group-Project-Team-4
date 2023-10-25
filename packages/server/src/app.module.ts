@@ -9,10 +9,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { CourseModule } from './course/course.module';
 import { InstructorModule } from './instructor/instructor.module';
-import { StudentModule } from './student/student.module';
 
 @Module({
-  imports: [UserModule, AuthModule, InstructorModule, CourseModule, StudentModule, JwtModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [UserModule, AuthModule, InstructorModule, CourseModule, JwtModule, ConfigModule.forRoot({ isGlobal: true })],
   controllers: [AppController],
   providers: [
     AppService,
