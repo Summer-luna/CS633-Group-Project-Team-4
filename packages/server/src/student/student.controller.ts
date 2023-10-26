@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { Course, UserOnCourse } from '@prisma/client';
-import { CheckInDto, FindCourseDto } from './dto/student.dto';
+import { CheckInDto } from './dto/student.dto';
 
 @Controller('student')
 export class StudentController {
@@ -12,8 +12,4 @@ export class StudentController {
     return await this.studentService.studentEnroll(studentInform);
   }
 
-  @Get('/findcourse')
-  async findCourse(@Body() courseInform: FindCourseDto): Promise<Course[]> {
-    return await this.studentService.findCourse(courseInform);
-  }
 }

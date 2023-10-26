@@ -8,7 +8,7 @@ export class CheckInDto {
   @IsString()
   @IsNotEmpty()
   @Field()
-  courseId: string;
+  joinCode: string;
 
   @IsNotEmpty()
   @IsString()
@@ -16,9 +16,4 @@ export class CheckInDto {
   studentId: string;
 }
 
-@InputType()
-export class FindCourseDto {
-  @IsString()
-  @Field()
-  name: string;
-}
+
