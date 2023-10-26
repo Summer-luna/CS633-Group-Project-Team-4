@@ -1,28 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
-import { CourseService } from 'src/course/course.service';
-import { CheckInDto } from './dto/student.dto';
+import { CourseService } from '../course/course.service';
+import { CheckInDto, DeleteCourseDto } from '../course/dto/course.dto';
 import { UserOnCourse } from '@prisma/client';
+import { UserOnCourseModel } from '../course/model/course.model';
 
 @Injectable()
 export class StudentService {
-  constructor(private prisma: PrismaService, private readonly courseService: CourseService) {}
+  constructor(private readonly courseService: CourseService) {}
 
-  async studentEnroll(inform: CheckInDto): Promise<UserOnCourse> {
-    const courdeId = await this.prisma.course.findFirst({
-      select: {
-        id: true
-      },
-      where: {
-        joinCode: inform.joinCode
-      }
-    })
-    return this.prisma.userOnCourse.create({
-      data: {
-        userId: inform.studentId,
-        courseId: courdeId.id
-      }
-    });
+  async studentEnroll(input: CheckInDto): Promise<UserOnCourse> {
+    return this.courseService.studentEnroll(input);
   }
 
+  async dropCourse(input: DeleteCourseDto): Promise<UserOnCourseModel> {
+    return this.courseService.dropCourse(input);
+  }
 }

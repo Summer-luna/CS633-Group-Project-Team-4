@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
+import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
-import { Course, Prisma } from '@prisma/client';
+import { Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
 import { UserOnCourseModel } from './model/course.model';
 
@@ -41,6 +41,27 @@ export class CourseService {
       data: {
         userId: course.userId,
         courseId: newCourse.id
+      },
+      include: {
+        Course: true
+      }
+    });
+  }
+
+  async studentEnroll(input: CheckInDto): Promise<UserOnCourse> {
+    const targetCourse = await this.prisma.course.findUnique({
+      where: {
+        joinCode: input.joinCode
+      }
+    });
+
+    return this.prisma.userOnCourse.create({
+      data: {
+        userId: input.studentId,
+        courseId: targetCourse.id
+      },
+      include: {
+        Course: true
       }
     });
   }
@@ -82,16 +103,7 @@ export class CourseService {
   }
 
   async deleteCourse(input: DeleteCourseDto): Promise<Course> {
-    console.log(input);
-
-    await this.prisma.userOnCourse.delete({
-      where: {
-        courseId_userId: {
-          courseId: input.courseId,
-          userId: input.userId
-        }
-      }
-    });
+    await this.dropCourse(input);
 
     return this.prisma.course.delete({
       where: {
@@ -127,6 +139,17 @@ export class CourseService {
       where: {
         endDate: {
           gt: new Date().toISOString()
+        }
+      }
+    });
+  }
+
+  async dropCourse(input: DeleteCourseDto): Promise<UserOnCourseModel> {
+    return this.prisma.userOnCourse.delete({
+      where: {
+        courseId_userId: {
+          courseId: input.courseId,
+          userId: input.userId
         }
       }
     });

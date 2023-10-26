@@ -3,7 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState } from 'react';
 import { DeleteCourseDialog } from './deleteCourseDialog.jsx';
 
-export const CourseCard = ({ courseName, courseId }) => {
+export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const handleDeleteDialogOpen = () => {
@@ -28,11 +28,18 @@ export const CourseCard = ({ courseName, courseId }) => {
         }
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          paddingBottom: 6,
+          display: 'flex',
+          justifyContent: 'right',
+          alignItems: 'center'
+        }}
+      >
         <Button onClick={handleDeleteDialogOpen}>
           <DeleteForeverIcon fontSize="large" sx={{ color: '#bc3c3c' }} />
         </Button>
-        <DeleteCourseDialog open={deleteDialogOpen} onClose={handleDeleteDialogClose} courseId={courseId} />
+        <DeleteCourseDialog open={deleteDialogOpen} onClose={handleDeleteDialogClose} courseId={courseId} deleteCourse={deleteCourse} />
       </Box>
 
       <Box sx={{ paddingBottom: 12 }}>

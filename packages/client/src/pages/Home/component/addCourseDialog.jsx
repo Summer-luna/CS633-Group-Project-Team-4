@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { useAuth } from '../../../context/auth.context.jsx';
 
-export const AddCourseDialog = (props) => {
-  const { open, onClose } = props;
+export const AddCourseDialog = ({ open, onClose, addCourse }) => {
   const [semester, setSemester] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -43,8 +42,8 @@ export const AddCourseDialog = (props) => {
     );
 
     if (res.data) {
+      addCourse(res.data);
       handleClose();
-      window.location.reload(false);
     }
   };
 

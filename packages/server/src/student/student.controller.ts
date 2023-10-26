@@ -1,15 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { Course, UserOnCourse } from '@prisma/client';
-import { CheckInDto } from './dto/student.dto';
+import { CheckInDto, DeleteCourseDto } from '../course/dto/course.dto';
+import { UserOnCourse } from '@prisma/client';
 
 @Controller('student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 
-  @Post('/checkin')
-  async signUp(@Body() studentInform: CheckInDto): Promise<UserOnCourse> {
-    return await this.studentService.studentEnroll(studentInform);
+  @Post('/enroll')
+  async studentEnroll(@Body() input: CheckInDto): Promise<UserOnCourse> {
+    return this.studentService.studentEnroll(input);
   }
 
+  @Delete('/drop')
+  async dropCourse(@Body() input: DeleteCourseDto): Promise<UserOnCourse> {
+    return this.studentService.dropCourse(input);
+  }
 }
