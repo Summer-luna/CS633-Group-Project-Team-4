@@ -8,6 +8,15 @@ import { InstructorModule } from './instructor/instructor.module';
 import { StudentModule } from './student/student.module';
 
 @Module({
+  imports: [UserModule, AuthModule, InstructorModule, CourseModule, JwtModule, StudentModule, ConfigModule.forRoot({ isGlobal: true })],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    }
+  ]
   imports: [UserModule, AuthModule, InstructorModule, CourseModule, JwtModule, ConfigModule.forRoot({ isGlobal: true }), StudentModule]
 })
 export class AppModule {}
