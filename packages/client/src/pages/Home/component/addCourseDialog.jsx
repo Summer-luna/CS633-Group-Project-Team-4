@@ -42,7 +42,6 @@ export const AddCourseDialog = ({ open, onClose, addCourse }) => {
     );
 
     if (res.data) {
-      console.log(res.data);
       addCourse(res.data);
       handleClose();
     }

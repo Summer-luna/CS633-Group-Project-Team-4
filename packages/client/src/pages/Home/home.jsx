@@ -89,7 +89,7 @@ export const Home = () => {
             Add Course
           </Button>
           <AddCourseDialog open={addDialogOpen} onClose={handleAddDialogClose} addCourse={addCourse} />
-          <AddStudentCourseDialog open={studentAddOpen} onClose={handleStudentAddClose} />
+          <AddStudentCourseDialog open={studentAddOpen} onClose={handleStudentAddClose} addCourse={addCourse} />
         </Box>
       </Stack>
       <Stack flexWrap="wrap" direction="row" gap={5} sx={{ mt: 7 }}>

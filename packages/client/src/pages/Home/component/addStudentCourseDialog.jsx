@@ -1,14 +1,32 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { axiosInstance } from '../../../utils/axioInstance.js';
+import { useAuth } from '../../../context/auth.context.jsx';
 
-export const AddStudentCourseDialog = (props) => {
-  const { open, onClose } = props;
+export const AddStudentCourseDialog = ({ open, onClose, addCourse }) => {
+  const { token, decoded_token } = useAuth();
 
   const handleClose = () => {
     onClose();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const res = await axiosInstance.post(
+      '/student/enroll',
+      { joinCode: data.get('joinCode'), studentId: decoded_token.id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (res.data) {
+      addCourse(res.data);
+      handleClose();
+    }
   };
 
   return (
