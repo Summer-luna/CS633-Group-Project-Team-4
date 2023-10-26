@@ -92,3 +92,16 @@ export class GetCourseByNameDto {
   @Field()
   name: string;
 }
+
+@InputType()
+export class CheckInDto {
+  @IsString()
+  @IsNotEmpty()
+  @Field()
+  joinCode: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  studentId: string;
+}

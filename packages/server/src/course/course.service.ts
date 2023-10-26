@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
+import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
-import { Course, Prisma } from '@prisma/client';
+import { Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
 import { UserOnCourseModel } from './model/course.model';
 
@@ -41,6 +41,24 @@ export class CourseService {
       data: {
         userId: course.userId,
         courseId: newCourse.id
+      },
+      include: {
+        Course: true
+      }
+    });
+  }
+
+  async studentEnroll(inform: CheckInDto): Promise<UserOnCourse> {
+    const targetCourse = await this.prisma.course.findUnique({
+      where: {
+        joinCode: inform.joinCode
+      }
+    });
+
+    return this.prisma.userOnCourse.create({
+      data: {
+        userId: inform.studentId,
+        courseId: targetCourse.id
       },
       include: {
         Course: true
