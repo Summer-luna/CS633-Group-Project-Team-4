@@ -3,5 +3,7 @@ export const Paths = {
   LOGIN: '/login',
   SIGNUP: '/signup',
   LOGOUT: '/logout',
-  PERMISSION_REQUIRED: '/permission-required'
+  PERMISSION_REQUIRED: '/permission-required',
+  COURSE: '/course',
+  COURSE_DETAIL: '/course/:courseId'
 };

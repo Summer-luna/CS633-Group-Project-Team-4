@@ -9,6 +9,7 @@ import { AuthGuard } from './pages/Authentication/auth.guard.jsx';
 import { Logout } from './pages/Authentication/logout.jsx';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { Students } from './pages/Course/courseDetail.jsx';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path={Paths.HOME} element={<Layout />}>
               <Route element={<AuthGuard />}>
                 <Route path={Paths.HOME} element={<Home />} />
+                <Route path={Paths.COURSE_DETAIL} element={<Students />} />
               </Route>
               <Route path={Paths.SIGNUP} element={<SignUp />} />
               <Route path={Paths.LOGIN} element={<SignIn />} />

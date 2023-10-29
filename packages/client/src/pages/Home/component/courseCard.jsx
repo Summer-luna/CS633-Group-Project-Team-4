@@ -2,9 +2,12 @@ import { Box, Button, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState } from 'react';
 import { DeleteCourseDialog } from './deleteCourseDialog.jsx';
+import { useNavigate } from 'react-router-dom';
+import { Paths } from '../../../constants/Paths.js';
 
 export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleDeleteDialogOpen = () => {
     setDeleteDialogOpen(true);
@@ -14,9 +17,15 @@ export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
     setDeleteDialogOpen(false);
   };
 
+  const navigateToCourse = () => {
+    console.log('navigate to course');
+    navigate(`${Paths.COURSE}/${courseId}`);
+  };
+
   return (
     <Box
       id={courseId}
+      onClick={navigateToCourse}
       sx={{
         minWidth: 700,
         border: '1px solid #265792',
