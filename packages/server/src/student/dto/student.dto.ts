@@ -15,5 +15,3 @@ export class CheckInDto {
   @Field()
   studentId: string;
 }
-
-
