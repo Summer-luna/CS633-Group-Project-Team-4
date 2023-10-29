@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { DeleteCourseDialog } from './deleteCourseDialog.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants/Paths.js';
+import { useAuth } from '../../../context/auth.context.jsx';
 
 export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const navigate = useNavigate();
+  const { decoded_token } = useAuth();
 
   const handleDeleteDialogOpen = () => {
     setDeleteDialogOpen(true);
@@ -18,14 +20,14 @@ export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   };
 
   const navigateToCourse = () => {
-    console.log('navigate to course');
-    navigate(`${Paths.COURSE}/${courseId}`);
+    if (decoded_token.role !== 0) {
+      navigate(`${Paths.COURSE}/${courseId}`, { state: { courseName } });
+    }
   };
 
   return (
     <Box
       id={courseId}
-      onClick={navigateToCourse}
       sx={{
         minWidth: 700,
         border: '1px solid #265792',
@@ -42,7 +44,8 @@ export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
           paddingBottom: 6,
           display: 'flex',
           justifyContent: 'right',
-          alignItems: 'center'
+          alignItems: 'center',
+          zIndex: 40
         }}
       >
         <Button onClick={handleDeleteDialogOpen}>
@@ -51,7 +54,7 @@ export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
         <DeleteCourseDialog open={deleteDialogOpen} onClose={handleDeleteDialogClose} courseId={courseId} deleteCourse={deleteCourse} />
       </Box>
 
-      <Box sx={{ paddingBottom: 12 }}>
+      <Box sx={{ paddingBottom: 12 }} onClick={navigateToCourse}>
         <Typography component="h1" variant="h4" align="center">
           {courseName}
         </Typography>

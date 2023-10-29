@@ -1,33 +1,42 @@
 import { IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { StudentTable } from './studentTable.jsx';
 import { Delete } from '@mui/icons-material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/auth.context.jsx';
+import { useLocation, useParams } from 'react-router-dom';
+import { axiosInstance } from '../../utils/axioInstance.js';
 
-const rows = [
-  {
-    id: '123456',
-    name: 'Khushbu Kumari',
-    email: 'Khushbu@bu.edu'
-  },
-  {
-    id: '246802',
-    name: 'Xinyue Luna',
-    email: 'Xinyue@bu.edu'
-  },
-  {
-    id: '369258',
-    name: 'Yilin Li',
-    email: 'Yilin@bu.edu'
-  },
-  {
-    id: '482604',
-    name: 'Nelson Montesinos',
-    email: 'Nelson@bu.edu'
-  }
-];
+export const Students = () => {
+  const { token } = useAuth();
+  const { courseId } = useParams();
+  const [students, setStudents] = useState([]);
+  const location = useLocation();
+  const { courseName } = location.state;
 
-export const Students = ({ name }) => {
-  useEffect(() => {});
+  useEffect(() => {
+    const getStudents = async () => {
+      const res = await axiosInstance.get(`/instructor/course/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.data) {
+        console.log(res.data);
+        const courses = res.data;
+        const revisedCourses = courses.map((course) => {
+          return { id: course.User.buID, name: `${course.User.firstName} ${course.User.lastName}`, email: course.User.email };
+        });
+
+        setStudents(revisedCourses);
+      }
+    };
+
+    if (token) {
+      getStudents();
+    }
+  }, [token]);
+
   const tableConfig = [
     {
       field: 'id',
@@ -56,13 +65,16 @@ export const Students = ({ name }) => {
       )
     }
   ];
+
   return (
-    <Stack>
-      <Stack>
-        <Typography variant="h4">{name}</Typography>
+    <Stack gap={4}>
+      <Stack gap={2}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#265792' }}>
+          {courseName}
+        </Typography>
         <Typography variant="body1">Roster</Typography>
       </Stack>
-      <StudentTable tableConfig={tableConfig} rows={rows} />
+      <StudentTable tableConfig={tableConfig} rows={students} />
     </Stack>
   );
 };
