@@ -103,13 +103,17 @@ export class CourseService {
   }
 
   async deleteCourse(input: DeleteCourseDto): Promise<Course> {
-    await this.dropCourse(input);
+    try {
+      await this.dropCourse(input);
 
-    return this.prisma.course.delete({
-      where: {
-        id: input.courseId
-      }
-    });
+      return this.prisma.course.delete({
+        where: {
+          id: input.courseId
+        }
+      });
+    } catch (error) {
+      throw new Error('Unable to delete course');
+    }
   }
 
   async getCourseByName(courseName: GetCourseByNameDto): Promise<Course[]> {
@@ -119,6 +123,21 @@ export class CourseService {
         endDate: {
           gt: new Date().toISOString()
         }
+      }
+    });
+  }
+
+  async getCourseById(courseId: string): Promise<UserOnCourse[]> {
+    return this.prisma.userOnCourse.findMany({
+      where: {
+        courseId: courseId,
+        User: {
+          role: 0
+        }
+      },
+      include: {
+        Course: true,
+        User: true
       }
     });
   }

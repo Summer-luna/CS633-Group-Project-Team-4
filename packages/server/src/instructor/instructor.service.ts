@@ -16,4 +16,8 @@ export class InstructorService {
   async deleteCourse(input: DeleteCourseDto): Promise<CourseModel> {
     return this.courseService.deleteCourse(input);
   }
+
+  async getCourseById(courseId: string): Promise<UserOnCourse[]> {
+    return this.courseService.getCourseById(courseId);
+  }
 }
