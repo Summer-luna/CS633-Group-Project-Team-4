@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CourseService } from '../course/course.service';
-import { CheckInDto, DeleteCourseDto } from '../course/dto/course.dto';
-import { UserOnCourse } from '@prisma/client';
+import { CheckInDto, DeleteCourseDto, AttendanceTypeEditDto } from '../course/dto/course.dto';
+import { Attendance, UserOnCourse } from '@prisma/client';
 import { UserOnCourseModel } from '../course/model/course.model';
 
 @Injectable()
@@ -14,5 +14,9 @@ export class StudentService {
 
   async dropCourse(input: DeleteCourseDto): Promise<UserOnCourseModel> {
     return this.courseService.dropCourse(input);
+  }
+
+  async takeAttendence(input: AttendanceTypeEditDto): Promise<Attendance> {
+    return this.courseService.takeAttendence(input);
   }
 }
