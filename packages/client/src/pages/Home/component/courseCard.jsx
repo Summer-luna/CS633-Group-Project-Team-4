@@ -9,7 +9,6 @@ import { useAuth } from '../../../context/auth.context.jsx';
 export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const { decoded_token } = useAuth();
 
   const handleDeleteDialogOpen = () => {
     setDeleteDialogOpen(true);
