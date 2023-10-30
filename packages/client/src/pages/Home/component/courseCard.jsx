@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { DeleteCourseDialog } from './deleteCourseDialog.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants/Paths.js';
-import { useAuth } from '../../../context/auth.context.jsx';
 
 export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
