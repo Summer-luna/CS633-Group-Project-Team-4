@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 
 export const StudentTable = ({ rows, tableConfig }) => {
   return (
-    <TableContainer>
+    <TableContainer sx={{ minHeight: '500px' }}>
       <Table>
         <TableHead>
           <TableRow>
