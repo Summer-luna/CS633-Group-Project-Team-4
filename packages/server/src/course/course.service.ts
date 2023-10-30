@@ -127,7 +127,7 @@ export class CourseService {
     });
   }
 
-  async getCourseById(courseId: string): Promise<UserOnCourse[]> {
+  async getStudentsByCourseId(courseId: string): Promise<UserOnCourse[]> {
     return this.prisma.userOnCourse.findMany({
       where: {
         courseId: courseId,
@@ -138,6 +138,14 @@ export class CourseService {
       include: {
         Course: true,
         User: true
+      }
+    });
+  }
+
+  async getCourseById(courseId: string): Promise<Course> {
+    return this.prisma.course.findUnique({
+      where: {
+        id: courseId
       }
     });
   }

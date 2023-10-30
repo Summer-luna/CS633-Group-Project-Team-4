@@ -9,4 +9,9 @@ export class UserController {
   async getUserByIdWithCourses(@Param('id') id: string) {
     return await this.userService.getUserByIdWithCourses(id);
   }
+
+  @Get('/course/:id')
+  async getCourseById(@Param('id') id: string) {
+    return this.userService.getCourseById(id);
+  }
 }

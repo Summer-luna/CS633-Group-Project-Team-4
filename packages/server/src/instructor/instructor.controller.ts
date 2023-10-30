@@ -29,6 +29,6 @@ export class InstructorController {
   @Roles(Role.Professor)
   @Get('/course/:id')
   async getCourseById(@Param() input: { id: string }): Promise<UserOnCourse[]> {
-    return this.instructorService.getCourseById(input.id);
+    return this.instructorService.getStudentsByCourseId(input.id);
   }
 }

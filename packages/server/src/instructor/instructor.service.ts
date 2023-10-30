@@ -17,7 +17,7 @@ export class InstructorService {
     return this.courseService.deleteCourse(input);
   }
 
-  async getCourseById(courseId: string): Promise<UserOnCourse[]> {
-    return this.courseService.getCourseById(courseId);
+  async getStudentsByCourseId(courseId: string): Promise<UserOnCourse[]> {
+    return this.courseService.getStudentsByCourseId(courseId);
   }
 }

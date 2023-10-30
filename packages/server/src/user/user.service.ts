@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { Prisma, User } from '@prisma/client';
+import { Course, Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { CourseService } from '../course/course.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private readonly courseService: CourseService) {}
 
   private readonly SALT_ROUNDS = 15;
 
@@ -62,5 +63,9 @@ export class UserService {
         }
       }
     });
+  }
+
+  async getCourseById(id: string): Promise<Course> {
+    return this.courseService.getCourseById(id);
   }
 }
