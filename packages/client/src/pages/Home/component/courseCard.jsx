@@ -20,9 +20,7 @@ export const CourseCard = ({ courseName, courseId, deleteCourse }) => {
   };
 
   const navigateToCourse = () => {
-    if (decoded_token.role !== 0) {
-      navigate(`${Paths.COURSE}/${courseId}`, { state: { courseName } });
-    }
+    navigate(`${Paths.COURSE}/${courseId}`, { state: { courseName } });
   };
 
   return (

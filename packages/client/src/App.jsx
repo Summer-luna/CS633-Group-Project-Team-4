@@ -9,9 +9,9 @@ import { AuthGuard } from './pages/Authentication/auth.guard.jsx';
 import { Logout } from './pages/Authentication/logout.jsx';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { Students } from './pages/Course/courseDetail.jsx';
-import { PresentSlides } from './pages/Course/presentSlides.jsx';
-import { AttendanceReport } from './pages/Course/attendanceReport.jsx';
+import { PresentSlides } from './pages/Course/professor/presentSlides.jsx';
+import { AttendanceReport } from './pages/Course/professor/attendanceReport.jsx';
+import { CourseDetailGuard } from './pages/Course/courseDetailGuard.jsx';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
             <Route path={Paths.HOME} element={<Layout />}>
               <Route element={<AuthGuard />}>
                 <Route path={Paths.HOME} element={<Home />} />
-                <Route path={Paths.COURSE_DETAIL} element={<Students />} />
+                <Route path={Paths.COURSE_DETAIL} element={<CourseDetailGuard />} />
                 <Route path={Paths.PRESENT_SLIDES} element={<PresentSlides />} />
                 <Route path={Paths.ATTENDANCE_REPORT} element={<AttendanceReport />} />
               </Route>

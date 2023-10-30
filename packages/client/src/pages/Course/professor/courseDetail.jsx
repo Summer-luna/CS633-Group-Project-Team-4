@@ -2,10 +2,10 @@ import { Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { StudentTable } from './studentTable.jsx';
 import { Delete } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/auth.context.jsx';
+import { useAuth } from '../../../context/auth.context.jsx';
 import { useLocation, useParams } from 'react-router-dom';
-import { axiosInstance } from '../../utils/axioInstance.js';
-import { Paths } from '../../constants/Paths.js';
+import { axiosInstance } from '../../../utils/axioInstance.js';
+import { Paths } from '../../../constants/Paths.js';
 import { Link } from 'react-router-dom';
 
 export const Students = () => {

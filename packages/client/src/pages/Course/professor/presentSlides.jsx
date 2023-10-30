@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-import { Paths } from '../../constants/Paths.js';
+import { Paths } from '../../../constants/Paths.js';
 
 export const PresentSlides = () => {
   const { course } = useLocation().state;
