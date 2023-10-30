@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Paths } from '../../constants/Paths.js';
 
 export const PresentSlides = () => {
