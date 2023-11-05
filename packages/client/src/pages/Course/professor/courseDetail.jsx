@@ -7,6 +7,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { Paths } from '../../../constants/Paths.js';
 import { Link } from 'react-router-dom';
+import { DeleteStudentDialog } from './deleteStudentDialog.jsx';
 
 export const Students = () => {
   const { token } = useAuth();
@@ -15,6 +16,8 @@ export const Students = () => {
   const [course, setCourse] = useState({});
   const location = useLocation();
   const { courseName } = location.state;
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [studentId, setStudentId] = useState(null);
 
   useEffect(() => {
     const getStudents = async () => {
@@ -27,7 +30,7 @@ export const Students = () => {
       if (res.data) {
         const courses = res.data;
         const revisedCourses = courses.map((course) => {
-          return { id: course.User.buID, name: `${course.User.firstName} ${course.User.lastName}`, email: course.User.email };
+          return { id: course.User.buID, name: `${course.User.firstName} ${course.User.lastName}`, email: course.User.email, userId: course.userId };
         });
 
         setStudents(revisedCourses);
@@ -52,6 +55,32 @@ export const Students = () => {
     }
   }, [token]);
 
+  const handleDelete = async (studentId) => {
+    const res = await axiosInstance.delete(`/student/drop`, {
+      data: {
+        courseId: course.id,
+        userId: studentId
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (res.data) {
+      handleDeleteDialogClose();
+      window.location.reload();
+    }
+  };
+
+  const handleDeleteDialogOpen = (studentId) => {
+    setStudentId(studentId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
+
   const tableConfig = [
     {
       field: 'id',
@@ -71,13 +100,17 @@ export const Students = () => {
     {
       field: 'actions',
       name: 'Actions',
-      render: () => (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Delete sx={{ color: '#265792' }} />
-          </IconButton>
-        </Tooltip>
-      )
+      render: (row) => {
+        return (
+          <>
+            <Tooltip title="Delete">
+              <IconButton onClick={() => handleDeleteDialogOpen(row.userId)}>
+                <Delete sx={{ color: '#265792' }} />
+              </IconButton>
+            </Tooltip>
+          </>
+        );
+      }
     }
   ];
 
@@ -98,6 +131,7 @@ export const Students = () => {
           <Button variant="contained">View Attendance</Button>
         </Link>
       </Stack>
+      <DeleteStudentDialog open={deleteDialogOpen} onClose={handleDeleteDialogClose} handleDelete={() => handleDelete(studentId)} />
     </Stack>
   );
 };
