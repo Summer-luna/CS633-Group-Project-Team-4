@@ -63,7 +63,7 @@ model Attendance {
   id             String         @id @default(uuid())
   classId        String
   class          Course         @relation(fields: [classId], references: [id])
-  attendanceType Int            @default(0)
+  attendanceType Int            @default(1)
   type           AttendanceType @relation(fields: [attendanceType], references: [id])
   userId         String
   user           User           @relation(fields: [userId], references: [id])
