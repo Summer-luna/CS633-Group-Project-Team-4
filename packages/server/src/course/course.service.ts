@@ -144,6 +144,18 @@ export class CourseService {
     return this.prisma.course.findUnique({
       where: {
         id: courseId
+      },
+      include: {
+        User: {
+          where: {
+            User: {
+              role: 1
+            }
+          },
+          include: {
+            User: true
+          }
+        }
       }
     });
   }
@@ -279,6 +291,17 @@ export class CourseService {
       }
     });
   }
+
+  // async getProfessorByCourseId(courseId: string): Promise<User> {
+  //   return this.prisma.course.findUnique({
+  //     where: {
+  //       id: courseId,
+  //       Role: {
+  //         role: 1
+  //       }
+  //     }
+  //   });
+  // }
 
   // async updateAttendanceStateForMissingStudent(id: string) {
   //   await this.initAttendanceCode(id);

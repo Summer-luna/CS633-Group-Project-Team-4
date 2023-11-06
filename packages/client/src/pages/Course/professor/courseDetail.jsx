@@ -8,16 +8,17 @@ import { axiosInstance } from '../../../utils/axioInstance.js';
 import { Paths } from '../../../constants/Paths.js';
 import { Link } from 'react-router-dom';
 import { DeleteStudentDialog } from './deleteStudentDialog.jsx';
+import { useCourseDetail } from '../../../hooks/useCourseDetail.jsx';
 
 export const Students = () => {
   const { token } = useAuth();
   const { courseId } = useParams();
   const [students, setStudents] = useState([]);
-  const [course, setCourse] = useState({});
   const location = useLocation();
   const { courseName } = location.state;
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [studentId, setStudentId] = useState(null);
+  const { course } = useCourseDetail(courseId);
 
   useEffect(() => {
     const getStudents = async () => {
@@ -37,28 +38,15 @@ export const Students = () => {
       }
     };
 
-    const getCourseDetail = async () => {
-      const res = await axiosInstance.get(`user/course/${courseId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (res.data) {
-        setCourse(res.data);
-      }
-    };
-
     if (token) {
       getStudents();
-      getCourseDetail();
     }
   }, [token]);
 
   const handleDelete = async (studentId) => {
     const res = await axiosInstance.delete(`/student/drop`, {
       data: {
-        courseId: course.id,
+        courseId: courseId,
         userId: studentId
       },
       headers: {
