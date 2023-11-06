@@ -1,7 +1,8 @@
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
 
-export const AttendanceDialog = ({ open, onClose, setFinished }) => {
+export const AttendanceDialog = ({ open, onClose, setFinished, attendanceCode, endAttendance, joinCode }) => {
   const handleFinish = () => {
+    endAttendance();
     setFinished(true);
     onClose();
   };
@@ -12,45 +13,28 @@ export const AttendanceDialog = ({ open, onClose, setFinished }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth={'sm'}>
-      <DialogContent>
-        <Stack>
-          <Typography
-            align={'center'}
-            variant={'h5'}
-            sx={{
-              padding: 2
-            }}
-          >
-            Attendance Code:
-          </Typography>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogContent sx={{ marginY: 5 }}>
+        <Stack gap={2} alignItems="center">
+          <Typography variant="h5">Attendance Code:</Typography>
 
           <Typography
-            align={'center'}
-            variant={'h2'}
+            variant="h1"
             sx={{
               color: '#265792',
               fontWeight: 'bold'
             }}
           >
-            1234
+            {attendanceCode}
           </Typography>
 
-          <Typography
-            align={'center'}
-            variant={'body1'}
-            sx={{
-              padding: 2
-            }}
-          >
+          <Typography variant="h6" sx={{ color: 'grey' }}>
             Enter the above code into the ClassGuardian now
           </Typography>
 
           <Typography
-            align={'center'}
-            variant={'body1'}
+            variant="body1"
             sx={{
-              paddingTop: 2,
               fontWeight: 'bold'
             }}
           >
@@ -58,17 +42,16 @@ export const AttendanceDialog = ({ open, onClose, setFinished }) => {
           </Typography>
 
           <Typography
-            align={'center'}
-            variant={'h4'}
+            variant="h4"
             sx={{
               color: '#265792',
               fontWeight: 'light'
             }}
           >
-            654321
+            {joinCode}
           </Typography>
 
-          <Typography align={'center'}>to join this course.</Typography>
+          <Typography sx={{ color: 'grey' }}>to join this course.</Typography>
         </Stack>
       </DialogContent>
       <DialogActions>

@@ -12,25 +12,28 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { PresentSlides } from './pages/Course/professor/presentSlides.jsx';
 import { AttendanceReport } from './pages/Course/professor/attendanceReport.jsx';
 import { CourseDetailGuard } from './pages/Course/courseDetailGuard.jsx';
+import { AttendanceProvider } from './context/attendance.context.jsx';
 
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Router>
         <AuthProvider>
-          <Routes>
-            <Route path={Paths.HOME} element={<Layout />}>
-              <Route element={<AuthGuard />}>
-                <Route path={Paths.HOME} element={<Home />} />
-                <Route path={Paths.COURSE_DETAIL} element={<CourseDetailGuard />} />
-                <Route path={Paths.PRESENT_SLIDES} element={<PresentSlides />} />
-                <Route path={Paths.ATTENDANCE_REPORT} element={<AttendanceReport />} />
+          <AttendanceProvider>
+            <Routes>
+              <Route path={Paths.HOME} element={<Layout />}>
+                <Route element={<AuthGuard />}>
+                  <Route path={Paths.HOME} element={<Home />} />
+                  <Route path={Paths.COURSE_DETAIL} element={<CourseDetailGuard />} />
+                  <Route path={Paths.PRESENT_SLIDES} element={<PresentSlides />} />
+                  <Route path={Paths.ATTENDANCE_REPORT} element={<AttendanceReport />} />
+                </Route>
+                <Route path={Paths.SIGNUP} element={<SignUp />} />
+                <Route path={Paths.LOGIN} element={<SignIn />} />
+                <Route path={Paths.LOGOUT} element={<Logout />} />
               </Route>
-              <Route path={Paths.SIGNUP} element={<SignUp />} />
-              <Route path={Paths.LOGIN} element={<SignIn />} />
-              <Route path={Paths.LOGOUT} element={<Logout />} />
-            </Route>
-          </Routes>
+            </Routes>
+          </AttendanceProvider>
         </AuthProvider>
       </Router>
     </LocalizationProvider>
