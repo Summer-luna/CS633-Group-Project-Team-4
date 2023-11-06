@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserOnCourse } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CourseService } from 'src/course/course.service';
-import { AddCourseDto, DeleteCourseDto } from '../course/dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto } from '../course/dto/course.dto';
 import { CourseModel } from '../course/model/course.model';
 
 @Injectable()
@@ -19,5 +19,12 @@ export class InstructorService {
 
   async getStudentsByCourseId(courseId: string): Promise<UserOnCourse[]> {
     return this.courseService.getStudentsByCourseId(courseId);
+  }
+
+  async createAttendanceCode(courseId: GetAttendanceCodeDto) {
+    await this.courseService.addAttendanceList(courseId.classId);
+    setTimeout(() => {
+      return this.courseService.updateAttendanceStateForMissingStudent(courseId.classId);
+    }, 300000);
   }
 }
