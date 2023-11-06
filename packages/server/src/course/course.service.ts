@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto } from './dto/course.dto';
+import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto, AttendanceTypeEditDto, GetAttendanceCodeDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
-import { Course, Prisma, UserOnCourse } from '@prisma/client';
+import { Attendance, Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
 import { UserOnCourseModel } from './model/course.model';
 
@@ -205,7 +205,101 @@ export class CourseService {
     return attendanceCode;
   }
 
+  async takeAttendence(attendInform: AttendanceTypeEditDto): Promise<Attendance> {
+    if (!this.checkAttendenceCode(attendInform.attendanceCode, attendInform.classId)) {
+      throw new Error('AttendenceCode is incorrect!');
+    }
+    const currentId = await this.prisma.attendance.findFirst({
+      select: {
+        id: true
+      },
+      where: {
+        userId: attendInform.userId,
+        classId: attendInform.classId,
+        attendanceType: null
+      }
+    });
+    return this.updateAttendenceState(currentId.id, 0);
+  }
+
   async generateRandomCode(size: number): Promise<string> {
     return randomatic('0', size);
+  }
+
+  async checkAttendenceCode(code: string, classId: string): Promise<boolean> {
+    const correctCode = await this.prisma.course.findFirst({
+      select: {
+        attendanceCode: true
+      },
+      where: {
+        id: classId
+      }
+    });
+    if (code == correctCode.attendanceCode) {
+      return true;
+    }
+    return false;
+  }
+
+  async updateAttendenceState(id: string, attendanceType: number): Promise<Attendance> {
+    return await this.prisma.attendance.update({
+      where: {
+        id: id
+      },
+      data: {
+        attendanceType: attendanceType
+      }
+    });
+  }
+
+  async getAttendanceCode(id: GetAttendanceCodeDto): Promise<string> {
+    const attendanceCode = await this.prisma.course.findFirst({
+      where: {
+        id: id.classId
+      }
+    });
+    return attendanceCode.attendanceCode;
+  }
+
+  async addAttendanceList(id: string) {
+    const userList = await this.prisma.userOnCourse.findMany({
+      where: {
+        courseId: id
+      }
+    });
+    let createData: Prisma.AttendanceCreateManyInput;
+    let createList = new Array();
+    for (var user in userList) {
+      createData = {
+        userId: user,
+        classId: id,
+        attendanceType: null
+      };
+      createList.push(createData);
+    }
+
+    return this.prisma.attendance.createMany({ data: createList });
+  }
+
+  async initAttendanceCode(courseId: string) {
+    await this.prisma.course.update({
+      where: {
+        id: courseId
+      },
+      data: {
+        attendanceCode: null
+      }
+    });
+  }
+  async updateAttendanceStateForMissingStudent(id: string) {
+    await this.initAttendanceCode(id);
+    return await this.prisma.attendance.updateMany({
+      where: {
+        attendanceType: null
+      },
+      data: {
+        attendanceType: 1
+      }
+    });
   }
 }

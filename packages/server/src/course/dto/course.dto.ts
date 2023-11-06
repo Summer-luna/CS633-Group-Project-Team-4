@@ -105,3 +105,33 @@ export class CheckInDto {
   @Field()
   studentId: string;
 }
+
+@InputType()
+export class AttendanceTypeEditDto {
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  attendanceCode: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  classId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  userId: string;
+
+  @IsString()
+  @Field()
+  attendanceId: string;
+}
+
+@InputType()
+export class GetAttendanceCodeDto {
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  classId: string;
+}

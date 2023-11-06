@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Put } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { CheckInDto, DeleteCourseDto } from '../course/dto/course.dto';
-import { UserOnCourse } from '@prisma/client';
+import { AttendanceTypeEditDto, CheckInDto, DeleteCourseDto } from '../course/dto/course.dto';
+import { Attendance, UserOnCourse } from '@prisma/client';
 
 @Controller('student')
 export class StudentController {
@@ -15,5 +15,10 @@ export class StudentController {
   @Delete('/drop')
   async dropCourse(@Body() input: DeleteCourseDto): Promise<UserOnCourse> {
     return this.studentService.dropCourse(input);
+  }
+
+  @Put('takeattendence')
+  async takeAttendence(@Body() input: AttendanceTypeEditDto): Promise<Attendance> {
+    return this.studentService.takeAttendence(input);
   }
 }

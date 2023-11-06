@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
 import { CourseModel, UserOnCourseModel } from './model/course.model';
 
 @Controller('course')
@@ -30,5 +30,10 @@ export class CourseController {
   @Get('/getall')
   async getAllCourses() {
     return this.courseService.getAllCourses();
+  }
+
+  @Get('/getattendencecode')
+  async getAttendanceCode(@Body() courseId: GetAttendanceCodeDto): Promise<string> {
+    return this.courseService.getAttendanceCode(courseId);
   }
 }
