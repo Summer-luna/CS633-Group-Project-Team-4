@@ -111,7 +111,7 @@ export class AttendanceTypeEditDto {
   @IsNotEmpty()
   @IsString()
   @Field()
-  attendenceCode: string;
+  attendanceCode: string;
 
   @IsNotEmpty()
   @IsString()
@@ -125,5 +125,13 @@ export class AttendanceTypeEditDto {
 
   @IsString()
   @Field()
-  attendenceId: string;
+  attendanceId: string;
+}
+
+@InputType()
+export class GetAttendanceCodeDto {
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  classId: string;
 }

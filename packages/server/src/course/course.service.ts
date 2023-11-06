@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto, AttendanceTypeEditDto } from './dto/course.dto';
+import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto, AttendanceTypeEditDto, GetAttendanceCodeDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Attendance, Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
@@ -206,7 +206,7 @@ export class CourseService {
   }
 
   async takeAttendence(attendInform: AttendanceTypeEditDto): Promise<Attendance> {
-    if (!this.checkAttendenceCode(attendInform.attendenceCode, attendInform.classId)) {
+    if (!this.checkAttendenceCode(attendInform.attendanceCode, attendInform.classId)) {
       throw new Error('AttendenceCode is incorrect!');
     }
     const currentId = await this.prisma.attendance.findFirst({
@@ -216,7 +216,7 @@ export class CourseService {
       where: {
         userId: attendInform.userId,
         classId: attendInform.classId,
-        attendanceType: 1
+        attendanceType: null
       }
     });
     return this.updateAttendenceState(currentId.id, 0);
@@ -250,5 +250,32 @@ export class CourseService {
         attendanceType: attendanceType
       }
     });
+  }
+
+  async getAttendanceCode(id: GetAttendanceCodeDto): Promise<string> {
+    const attendanceCode = await this.prisma.course.findFirst({
+      where: {
+        id: id.classId
+      }
+    });
+    return attendanceCode.attendanceCode;
+  }
+
+  async addAttendanceList(id: string): Promise<Attendance[]> {
+    const userList = await this.prisma.userOnCourse.findMany({
+      where: {
+        courseId: id
+      }
+    });
+    let createData: Prisma.AttendanceCreateManyInput;
+    for (var user in userList) {
+      createData = {
+        userId: user,
+        classId: id,
+        attendanceType: null
+      };
+    }
+    console.log(createData);
+    return this.prisma.attendance.createMany({ data: createData });
   }
 }
