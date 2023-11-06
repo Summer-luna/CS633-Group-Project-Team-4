@@ -216,7 +216,7 @@ export class CourseService {
       where: {
         userId: attendInform.userId,
         classId: attendInform.classId,
-        attendanceType: null,
+        attendanceType: null
       }
     });
     return this.updateAttendenceState(currentId.id, 0);
@@ -253,7 +253,7 @@ export class CourseService {
   }
 
   async getAttendanceCode(id: GetAttendanceCodeDto): Promise<string> {
-    const attendanceCode =  await this.prisma.course.findFirst({
+    const attendanceCode = await this.prisma.course.findFirst({
       where: {
         id: id.classId
       }
@@ -269,19 +269,19 @@ export class CourseService {
     });
     let createData: Prisma.AttendanceCreateManyInput;
     let createList = new Array();
-    for (var user in userList){
+    for (var user in userList) {
       createData = {
         userId: user,
         classId: id,
         attendanceType: null
-      }
-      createList.push(createData)
+      };
+      createList.push(createData);
     }
 
-    return this.prisma.attendance.createMany({data: createList})
+    return this.prisma.attendance.createMany({ data: createList });
   }
 
-  async initAttendanceCode(courseId: string){
+  async initAttendanceCode(courseId: string) {
     await this.prisma.course.update({
       where: {
         id: courseId
