@@ -134,4 +134,8 @@ export class GetAttendanceCodeDto {
   @IsString()
   @Field()
   classId: string;
+
+  @IsOptional()
+  @Field()
+  attendanceCode?: string;
 }

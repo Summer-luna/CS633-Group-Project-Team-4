@@ -16,7 +16,7 @@ export class StudentService {
     return this.courseService.dropCourse(input);
   }
 
-  async takeAttendence(input: AttendanceTypeEditDto): Promise<Attendance> {
-    return this.courseService.takeAttendence(input);
+  async takeAttendance(input: AttendanceTypeEditDto): Promise<Attendance> {
+    return this.courseService.takeAttendance(input);
   }
 }

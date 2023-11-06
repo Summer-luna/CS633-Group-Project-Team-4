@@ -34,8 +34,8 @@ export class InstructorController {
 
   @UseGuards(AuthGuard)
   @Roles(Role.Professor)
-  @Put('/attendance/create')
+  @Put('/attendance/update')
   async createAttendance(@Body() input: GetAttendanceCodeDto) {
-    return this.instructorService.createAttendanceCode(input);
+    return this.instructorService.updateAttendanceCode(input);
   }
 }

@@ -21,10 +21,7 @@ export class InstructorService {
     return this.courseService.getStudentsByCourseId(courseId);
   }
 
-  async createAttendanceCode(courseId: GetAttendanceCodeDto) {
-    await this.courseService.addAttendanceList(courseId.classId);
-    setTimeout(() => {
-      return this.courseService.updateAttendanceStateForMissingStudent(courseId.classId);
-    }, 300000);
+  async updateAttendanceCode(input: GetAttendanceCodeDto) {
+    return this.courseService.updateAttendanceCode(input);
   }
 }
