@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import {
   AddCourseDto,
+  AttendanceTypeCheckDto,
+  AttendanceTypeInputDto,
   CheckInDto,
   DeleteCourseDto,
-  GetCourseByNameDto,
   GetAttendanceCodeDto,
-  GetStudentAttendanceStateListDto,
-  AttendanceTypeInputDto,
-  AttendanceTypeCheckDto
+  GetCourseByNameDto,
+  GetStudentAttendanceStateListDto
 } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Attendance, Course, Prisma, UserOnCourse } from '@prisma/client';
@@ -346,7 +346,7 @@ export class CourseService {
       }
     });
 
-    const formattedAttendances = res.map((attendance) => {
+    return res.map((attendance) => {
       return {
         id: attendance.id,
         attendanceType: attendance.attendanceType,
@@ -357,8 +357,6 @@ export class CourseService {
         userId: attendance.userId
       };
     });
-
-    return formattedAttendances;
   }
 
   // async checkDuplicateAttendanceCode(attendanceCode: string): Promise<boolean> {
