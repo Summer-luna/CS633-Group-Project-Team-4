@@ -5,16 +5,20 @@ import { AttendanceDialog } from './attendanceDialog.jsx';
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { useParams } from 'react-router-dom';
 import { useCourseDetail } from '../../../hooks/useCourseDetail.jsx';
+import { useAuth } from '../../../context/auth.context.jsx';
 
 export const CourseDetail = () => {
   const [open, setOpen] = useState(false);
+  const [isFind, setIsFind] = useState(null);
   const { courseId } = useParams();
   const { course } = useCourseDetail(courseId);
+  const [attendanceType, setAttendanceType] = useState(0);
   const [professor, setProfessor] = useState({
     firstName: '',
     lastName: '',
     email: ''
   });
+  const { decoded_token, token } = useAuth();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,6 +33,32 @@ export const CourseDetail = () => {
       setProfessor(course.User[0].User);
     }
   }, [course]);
+
+  useEffect(() => {
+    const checkAttendance = async () => {
+      const isFind = await axiosInstance.post(
+        '/student/checkAttendance',
+        {
+          classId: courseId,
+          userId: decoded_token.id
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (isFind) {
+        setIsFind(isFind.data);
+        setAttendanceType(isFind.data.attendanceType);
+      }
+    };
+
+    if (decoded_token && token) {
+      checkAttendance();
+    }
+  }, []);
 
   return (
     <Stack sx={{ backgroundColor: 'white', padding: 10, borderRadius: 2 }}>
@@ -55,12 +85,22 @@ export const CourseDetail = () => {
           <Typography>{course.location}</Typography>
         </Stack>
       </Stack>
-      <Box>
-        <Button variant="contained" onClick={handleClickOpen}>
-          Take Attendance
-        </Button>
-        <AttendanceDialog open={open} onClose={handleClose} />
-      </Box>
+      {isFind ? (
+        <Typography>You have been marked {attendanceType ? 'absence' : 'present'}</Typography>
+      ) : (
+        <Box>
+          <Button variant="contained" onClick={handleClickOpen}>
+            Take Attendance
+          </Button>
+          <AttendanceDialog
+            open={open}
+            onClose={handleClose}
+            setIsFind={setIsFind}
+            takeAttendanceData={{ classId: courseId, userId: decoded_token.id, attendanceCode: course.attendanceCode }}
+            setAttendanceType={setAttendanceType}
+          />
+        </Box>
+      )}
     </Stack>
   );
 };
