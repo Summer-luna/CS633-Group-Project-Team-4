@@ -25,7 +25,7 @@ export const PresentSlides = () => {
 
   useEffect(() => {
     const updateAttendanceCode = async () => {
-      const data = await axiosInstance.put(
+      await axiosInstance.put(
         `instructor/attendance/update`,
         {
           classId: id,

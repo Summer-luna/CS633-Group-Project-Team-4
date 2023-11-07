@@ -263,11 +263,7 @@ export class CourseService {
       }
     });
 
-    if (correctCode && code === correctCode.attendanceCode) {
-      return true;
-    }
-
-    return false;
+    return correctCode && code === correctCode.attendanceCode;
   }
 
   async updateAttendanceState(id: string, attendanceType: number): Promise<Attendance> {

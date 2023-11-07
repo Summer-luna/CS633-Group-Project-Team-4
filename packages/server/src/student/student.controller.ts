@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { AttendanceTypeEditDto, CheckInDto, DeleteCourseDto } from '../course/dto/course.dto';
 import { Attendance, UserOnCourse } from '@prisma/client';
