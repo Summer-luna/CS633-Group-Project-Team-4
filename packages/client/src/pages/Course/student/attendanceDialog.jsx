@@ -20,7 +20,7 @@ export const AttendanceDialog = ({ open, onClose, takeAttendanceData, setIsFind,
       }
     };
 
-    if (takeAttendanceData) {
+    if (takeAttendanceData.attendanceCode && takeAttendanceData.classId && takeAttendanceData.userId) {
       takeAttendance();
       onClose();
     }

@@ -89,16 +89,22 @@ export const CourseDetail = () => {
         <Typography>You have been marked {attendanceType ? 'absence' : 'present'}</Typography>
       ) : (
         <Box>
-          <Button variant="contained" onClick={handleClickOpen}>
-            Take Attendance
-          </Button>
-          <AttendanceDialog
-            open={open}
-            onClose={handleClose}
-            setIsFind={setIsFind}
-            takeAttendanceData={{ classId: courseId, userId: decoded_token.id, attendanceCode: course.attendanceCode }}
-            setAttendanceType={setAttendanceType}
-          />
+          {course.attendanceCode ? (
+            <Box>
+              <Button variant="contained" onClick={handleClickOpen}>
+                Take Attendance
+              </Button>
+              <AttendanceDialog
+                open={open}
+                onClose={handleClose}
+                setIsFind={setIsFind}
+                takeAttendanceData={{ classId: courseId, userId: decoded_token.id, attendanceCode: course.attendanceCode }}
+                setAttendanceType={setAttendanceType}
+              />
+            </Box>
+          ) : (
+            <Typography>Attendance is not available</Typography>
+          )}
         </Box>
       )}
     </Stack>
