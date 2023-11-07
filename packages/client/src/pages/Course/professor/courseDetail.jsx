@@ -2,19 +2,23 @@ import { Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { StudentTable } from './studentTable.jsx';
 import { Delete } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/auth.context.jsx';
+import { useAuth } from '../../../context/auth.context.jsx';
 import { useLocation, useParams } from 'react-router-dom';
-import { axiosInstance } from '../../utils/axioInstance.js';
-import { Paths } from '../../constants/Paths.js';
+import { axiosInstance } from '../../../utils/axioInstance.js';
+import { Paths } from '../../../constants/Paths.js';
 import { Link } from 'react-router-dom';
+import { DeleteStudentDialog } from './deleteStudentDialog.jsx';
+import { useCourseDetail } from '../../../hooks/useCourseDetail.jsx';
 
 export const Students = () => {
   const { token } = useAuth();
   const { courseId } = useParams();
   const [students, setStudents] = useState([]);
-  const [course, setCourse] = useState({});
   const location = useLocation();
   const { courseName } = location.state;
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [studentId, setStudentId] = useState(null);
+  const { course } = useCourseDetail(courseId);
 
   useEffect(() => {
     const getStudents = async () => {
@@ -27,30 +31,43 @@ export const Students = () => {
       if (res.data) {
         const courses = res.data;
         const revisedCourses = courses.map((course) => {
-          return { id: course.User.buID, name: `${course.User.firstName} ${course.User.lastName}`, email: course.User.email };
+          return { id: course.User.buID, name: `${course.User.firstName} ${course.User.lastName}`, email: course.User.email, userId: course.userId };
         });
 
         setStudents(revisedCourses);
       }
     };
 
-    const getCourseDetail = async () => {
-      const res = await axiosInstance.get(`user/course/${courseId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (res.data) {
-        setCourse(res.data);
-      }
-    };
-
     if (token) {
       getStudents();
-      getCourseDetail();
     }
   }, [token]);
+
+  const handleDelete = async (studentId) => {
+    const res = await axiosInstance.delete(`/student/drop`, {
+      data: {
+        courseId: courseId,
+        userId: studentId
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (res.data) {
+      handleDeleteDialogClose();
+      window.location.reload();
+    }
+  };
+
+  const handleDeleteDialogOpen = (studentId) => {
+    setStudentId(studentId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
 
   const tableConfig = [
     {
@@ -71,13 +88,17 @@ export const Students = () => {
     {
       field: 'actions',
       name: 'Actions',
-      render: () => (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Delete sx={{ color: '#265792' }} />
-          </IconButton>
-        </Tooltip>
-      )
+      render: (row) => {
+        return (
+          <>
+            <Tooltip title="Delete">
+              <IconButton onClick={() => handleDeleteDialogOpen(row.userId)}>
+                <Delete sx={{ color: '#265792' }} />
+              </IconButton>
+            </Tooltip>
+          </>
+        );
+      }
     }
   ];
 
@@ -98,6 +119,7 @@ export const Students = () => {
           <Button variant="contained">View Attendance</Button>
         </Link>
       </Stack>
+      <DeleteStudentDialog open={deleteDialogOpen} onClose={handleDeleteDialogClose} handleDelete={() => handleDelete(studentId)} />
     </Stack>
   );
 };

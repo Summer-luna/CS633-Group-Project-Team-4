@@ -107,12 +107,7 @@ export class CheckInDto {
 }
 
 @InputType()
-export class AttendanceTypeEditDto {
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  attendanceCode: string;
-
+export class AttendanceTypeCheckDto {
   @IsNotEmpty()
   @IsString()
   @Field()
@@ -122,7 +117,18 @@ export class AttendanceTypeEditDto {
   @IsString()
   @Field()
   userId: string;
+}
 
+@InputType()
+export class AttendanceTypeInputDto extends AttendanceTypeCheckDto {
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  attendanceCode: string;
+}
+
+@InputType()
+export class AttendanceTypeEditDto extends AttendanceTypeInputDto {
   @IsString()
   @Field()
   attendanceId: string;
@@ -134,6 +140,10 @@ export class GetAttendanceCodeDto {
   @IsString()
   @Field()
   classId: string;
+
+  @IsOptional()
+  @Field()
+  attendanceCode?: string;
 }
 
 @InputType()

@@ -1,28 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { axiosInstance } from '../../../utils/axioInstance.js';
-import { useAuth } from '../../../context/auth.context.jsx';
 
-export const DeleteCourseDialog = ({ onClose, open, courseId, deleteCourse }) => {
-  const { token, decoded_token } = useAuth();
-  const deleteURL = ['/student/drop', '/instructor/course/delete'];
-
-  const handleDelete = async () => {
-    const res = await axiosInstance.delete(`${deleteURL[decoded_token.role]}`, {
-      data: {
-        courseId: courseId,
-        userId: decoded_token.id
-      },
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (res.data) {
-      deleteCourse(courseId);
-      onClose();
-    }
-  };
-
+export const DeleteStudentDialog = ({ open, onClose, handleDelete }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle id="deleteCourseDialogTitle">{'Are you sure to delete this course permanently?'}</DialogTitle>

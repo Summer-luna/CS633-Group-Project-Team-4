@@ -9,10 +9,13 @@ import { UserOnCourseModel } from './model/course.model';
 export class CourseService {
   constructor(private prisma: PrismaService) {}
 
+  /**
+   *
+   * @param course
+   */
   async addCourse(course: AddCourseDto): Promise<UserOnCourseModel> {
     // Generate a new join code and attendance code if the generated code already exists in the database
     const joinCode = await this.generateUniqueJoinCode(6);
-    const attendanceCode = await this.generateUniqueAttendanceCode(4);
 
     const courseCount = await this.prisma.course.count({
       where: {
@@ -27,7 +30,6 @@ export class CourseService {
     const newCourse = await this.prisma.course.create({
       data: {
         name: course.name,
-        attendanceCode: attendanceCode,
         joinCode: joinCode,
         description: course.description,
         location: course.location,
@@ -146,6 +148,18 @@ export class CourseService {
     return this.prisma.course.findUnique({
       where: {
         id: courseId
+      },
+      include: {
+        User: {
+          where: {
+            User: {
+              role: 1
+            }
+          },
+          include: {
+            User: true
+          }
+        }
       }
     });
   }
@@ -194,40 +208,53 @@ export class CourseService {
     return joinCode;
   }
 
-  async generateUniqueAttendanceCode(size: number): Promise<string> {
-    let attendanceCode = await this.generateRandomCode(size);
-    let isDuplicateAttendanceCode = true;
+  async takeAttendance(attendInform: AttendanceTypeInputDto): Promise<Attendance> {
+    const isExist = await this.checkAttendance(attendInform);
+    const isMatched = await this.checkAttendanceCode(attendInform.attendanceCode, attendInform.classId);
+    let attendanceType = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    while (isDuplicateAttendanceCode) {
-      isDuplicateAttendanceCode = await this.checkDuplicateAttendanceCode(attendanceCode);
-      attendanceCode = await this.generateRandomCode(size);
+    if (!isMatched) {
+      attendanceType = 1;
     }
-    return attendanceCode;
-  }
 
-  async takeAttendence(attendInform: AttendanceTypeEditDto): Promise<Attendance> {
-    if (!this.checkAttendenceCode(attendInform.attendanceCode, attendInform.classId)) {
-      throw new Error('AttendenceCode is incorrect!');
+    if (isExist) {
+      throw new Error('Already checked in');
     }
-    const currentId = await this.prisma.attendance.findFirst({
-      select: {
-        id: true
-      },
-      where: {
+
+    return this.prisma.attendance.create({
+      data: {
         userId: attendInform.userId,
         classId: attendInform.classId,
-        attendanceType: null
+        attendanceType: attendanceType
       }
     });
-    return this.updateAttendenceState(currentId.id, 0);
+  }
+
+  async checkAttendance(input: AttendanceTypeCheckDto): Promise<Attendance> {
+    const { userId, classId } = input;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return this.prisma.attendance.findFirst({
+      where: {
+        userId: userId,
+        classId: classId,
+        created: {
+          gte: today,
+          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) // Next day
+        }
+      }
+    });
   }
 
   async generateRandomCode(size: number): Promise<string> {
     return randomatic('0', size);
   }
 
-  async checkAttendenceCode(code: string, classId: string): Promise<boolean> {
-    const correctCode = await this.prisma.course.findFirst({
+  async checkAttendanceCode(code: string, classId: string): Promise<boolean> {
+    const correctCode = await this.prisma.course.findUnique({
       select: {
         attendanceCode: true
       },
@@ -235,14 +262,12 @@ export class CourseService {
         id: classId
       }
     });
-    if (code == correctCode.attendanceCode) {
-      return true;
-    }
-    return false;
+
+    return correctCode && code === correctCode.attendanceCode;
   }
 
-  async updateAttendenceState(id: string, attendanceType: number): Promise<Attendance> {
-    return await this.prisma.attendance.update({
+  async updateAttendanceState(id: string, attendanceType: number): Promise<Attendance> {
+    return this.prisma.attendance.update({
       where: {
         id: id
       },
@@ -269,7 +294,7 @@ export class CourseService {
     });
     let createData: Prisma.AttendanceCreateManyInput;
     let createList = new Array();
-    for (var user in userList) {
+    for (let user in userList) {
       createData = {
         userId: user,
         classId: id,
@@ -281,24 +306,14 @@ export class CourseService {
     return this.prisma.attendance.createMany({ data: createList });
   }
 
-  async initAttendanceCode(courseId: string) {
-    await this.prisma.course.update({
+  async updateAttendanceCode(input: GetAttendanceCodeDto) {
+    const { classId, attendanceCode } = input;
+    return this.prisma.course.update({
       where: {
-        id: courseId
+        id: classId
       },
       data: {
-        attendanceCode: null
-      }
-    });
-  }
-  async updateAttendanceStateForMissingStudent(id: string) {
-    await this.initAttendanceCode(id);
-    return await this.prisma.attendance.updateMany({
-      where: {
-        attendanceType: null
-      },
-      data: {
-        attendanceType: 1
+        attendanceCode: attendanceCode
       }
     });
   }
@@ -313,4 +328,27 @@ export class CourseService {
       }
     });
   }
+
+  // async getProfessorByCourseId(courseId: string): Promise<User> {
+  //   return this.prisma.course.findUnique({
+  //     where: {
+  //       id: courseId,
+  //       Role: {
+  //         role: 1
+  //       }
+  //     }
+  //   });
+  // }
+
+  // async updateAttendanceStateForMissingStudent(id: string) {
+  //   await this.initAttendanceCode(id);
+  //   return this.prisma.attendance.updateMany({
+  //     where: {
+  //       attendanceType: null
+  //     },
+  //     data: {
+  //       attendanceType: 1
+  //     }
+  //   });
+  // }
 }
