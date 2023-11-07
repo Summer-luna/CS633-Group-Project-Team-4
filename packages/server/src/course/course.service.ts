@@ -1,5 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto, AttendanceTypeEditDto, GetAttendanceCodeDto, GetStudentAttendanceStateListDto } from './dto/course.dto';
+import {
+  AddCourseDto,
+  CheckInDto,
+  DeleteCourseDto,
+  GetCourseByNameDto,
+  GetAttendanceCodeDto,
+  GetStudentAttendanceStateListDto,
+  AttendanceTypeInputDto,
+  AttendanceTypeCheckDto
+} from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Attendance, Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
