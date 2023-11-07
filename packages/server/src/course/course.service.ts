@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto, AttendanceTypeEditDto, GetAttendanceCodeDto } from './dto/course.dto';
+import { AddCourseDto, CheckInDto, DeleteCourseDto, GetCourseByNameDto, AttendanceTypeEditDto, GetAttendanceCodeDto, GetStudentAttendanceStateListDto } from './dto/course.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Attendance, Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
@@ -299,6 +299,17 @@ export class CourseService {
       },
       data: {
         attendanceType: 1
+      }
+    });
+  }
+
+  async getStudentAttendanceStateList(inform: GetStudentAttendanceStateListDto): Promise<Attendance[]> {
+    return this.prisma.attendance.findMany({
+      where: {
+        created: {
+          gte: inform.startDate,
+          lte: inform.endDate
+        }
       }
     });
   }

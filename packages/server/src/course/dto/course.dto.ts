@@ -1,5 +1,5 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
+import { Field, InputType, InputType } from '@nestjs/graphql';
+import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString, IsDate } from 'class-validator';
 
 @InputType()
 export class AddCourseDto {
@@ -134,4 +134,20 @@ export class GetAttendanceCodeDto {
   @IsString()
   @Field()
   classId: string;
+}
+
+@InputType()
+export class GetStudentAttendanceStateListDto {
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  classId: string;
+
+  @IsDate()
+  @Field()
+  startDate: Date;
+
+  @IsDate()
+  @Field()
+  endDate: Date;
 }
