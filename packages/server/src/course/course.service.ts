@@ -68,16 +68,6 @@ export class CourseService {
     });
   }
 
-  async checkDuplicateAttendanceCode(attendanceCode: string): Promise<boolean> {
-    const courseAttendanceCodeCount = await this.prisma.course.count({
-      where: {
-        attendanceCode: attendanceCode
-      }
-    });
-
-    return courseAttendanceCodeCount !== 0;
-  }
-
   async checkDuplicateJoinCode(joinCode: string): Promise<boolean> {
     const courseJoinCodeCount = await this.prisma.course.count({
       where: {
@@ -164,17 +154,6 @@ export class CourseService {
     });
   }
 
-  async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
-    return this.prisma.course.findFirst({
-      where: {
-        name: course.name,
-        semesterId: course.semesterId,
-        startDate: course.startDate,
-        endDate: course.endDate
-      }
-    });
-  }
-
   async getAllCourses(): Promise<Course[]> {
     return this.prisma.course.findMany({
       where: {
@@ -234,8 +213,8 @@ export class CourseService {
 
   async checkAttendance(input: AttendanceTypeCheckDto): Promise<Attendance> {
     const { userId, classId } = input;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const date = new Date();
+    const { today, tomorrow } = this.getTodayAndYesterday(date);
 
     return this.prisma.attendance.findFirst({
       where: {
@@ -243,11 +222,16 @@ export class CourseService {
         classId: classId,
         created: {
           gte: today,
-          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) // Next day
+          lt: tomorrow // Next day
         }
       }
     });
   }
+
+  getTodayAndYesterday = (today: Date) => {
+    today.setHours(0, 0, 0, 0);
+    return { today: today, tomorrow: new Date(today.getTime() + 24 * 60 * 60 * 1000) };
+  };
 
   async generateRandomCode(size: number): Promise<string> {
     return randomatic('0', size);
@@ -286,24 +270,39 @@ export class CourseService {
     return attendanceCode.attendanceCode;
   }
 
-  async addAttendanceList(id: string) {
+  async markAbsence(input: { id: string }) {
+    const { id } = input;
+    const date = new Date();
+    const { today, tomorrow } = this.getTodayAndYesterday(date);
+
     const userList = await this.prisma.userOnCourse.findMany({
       where: {
-        courseId: id
+        courseId: id,
+        User: {
+          role: 0,
+          Attendance: {
+            none: {
+              created: {
+                gte: today,
+                lt: tomorrow // Next day
+              }
+            }
+          }
+        }
       }
     });
-    let createData: Prisma.AttendanceCreateManyInput;
-    let createList = new Array();
-    for (let user in userList) {
-      createData = {
-        userId: user,
-        classId: id,
-        attendanceType: null
-      };
-      createList.push(createData);
-    }
 
-    return this.prisma.attendance.createMany({ data: createList });
+    const attendanceData = userList.map((user) => {
+      return {
+        userId: user.userId,
+        classId: user.courseId,
+        attendanceType: 1
+      };
+    });
+
+    return this.prisma.attendance.createMany({
+      data: attendanceData
+    });
   }
 
   async updateAttendanceCode(input: GetAttendanceCodeDto) {
@@ -317,6 +316,16 @@ export class CourseService {
       }
     });
   }
+
+  // async checkDuplicateAttendanceCode(attendanceCode: string): Promise<boolean> {
+  //   const courseAttendanceCodeCount = await this.prisma.course.count({
+  //     where: {
+  //       attendanceCode: attendanceCode
+  //     }
+  //   });
+  //
+  //   return courseAttendanceCodeCount !== 0;
+  // }
 
   // async getProfessorByCourseId(courseId: string): Promise<User> {
   //   return this.prisma.course.findUnique({
@@ -337,6 +346,17 @@ export class CourseService {
   //     },
   //     data: {
   //       attendanceType: 1
+  //     }
+  //   });
+  // }
+
+  // async getUniqueCourse(course: Prisma.CourseWhereInput): Promise<Course> {
+  //   return this.prisma.course.findFirst({
+  //     where: {
+  //       name: course.name,
+  //       semesterId: course.semesterId,
+  //       startDate: course.startDate,
+  //       endDate: course.endDate
   //     }
   //   });
   // }

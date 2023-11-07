@@ -24,4 +24,8 @@ export class InstructorService {
   async updateAttendanceCode(input: GetAttendanceCodeDto) {
     return this.courseService.updateAttendanceCode(input);
   }
+
+  async markAbsence(input: { id: string }) {
+    return this.courseService.markAbsence(input);
+  }
 }

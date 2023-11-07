@@ -83,6 +83,7 @@ export const PresentSlides = () => {
         attendanceCode={attendanceCode}
         endAttendance={endAttendance}
         joinCode={joinCode}
+        courseId={id}
       />
     </Stack>
   );

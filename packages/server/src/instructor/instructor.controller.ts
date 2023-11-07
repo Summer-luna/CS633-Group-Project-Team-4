@@ -38,4 +38,11 @@ export class InstructorController {
   async createAttendance(@Body() input: GetAttendanceCodeDto) {
     return this.instructorService.updateAttendanceCode(input);
   }
+
+  @UseGuards(AuthGuard)
+  @Roles(Role.Professor)
+  @Post('/attendance/markAbsence')
+  async markAbsence(@Body() input: { id: string }) {
+    return this.instructorService.markAbsence(input);
+  }
 }

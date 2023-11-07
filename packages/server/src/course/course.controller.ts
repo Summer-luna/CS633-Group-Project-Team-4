@@ -36,4 +36,9 @@ export class CourseController {
   async getAttendanceCode(@Body() courseId: GetAttendanceCodeDto): Promise<string> {
     return this.courseService.getAttendanceCode(courseId);
   }
+
+  @Post('/markAbsence')
+  async markAbsence(@Body() input: { id: string }) {
+    return this.courseService.markAbsence(input);
+  }
 }

@@ -1,10 +1,27 @@
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
+import { axiosInstance } from '../../../utils/axioInstance.js';
+import { useAuth } from '../../../context/auth.context.jsx';
 
-export const AttendanceDialog = ({ open, onClose, setFinished, attendanceCode, endAttendance, joinCode }) => {
-  const handleFinish = () => {
-    endAttendance();
-    setFinished(true);
-    onClose();
+export const AttendanceDialog = ({ open, onClose, setFinished, attendanceCode, endAttendance, joinCode, courseId }) => {
+  const { token } = useAuth();
+  const handleFinish = async () => {
+    const res = await axiosInstance.post(
+      '/instructor/attendance/markAbsence',
+      {
+        id: courseId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (res.data) {
+      endAttendance();
+      setFinished(true);
+      onClose();
+    }
   };
 
   const handleMinimize = () => {
