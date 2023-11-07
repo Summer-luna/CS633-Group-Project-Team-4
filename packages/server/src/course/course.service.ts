@@ -12,7 +12,7 @@ import {
 import { PrismaService } from 'nestjs-prisma';
 import { Attendance, Course, Prisma, UserOnCourse } from '@prisma/client';
 import * as randomatic from 'randomatic';
-import { UserOnCourseModel } from './model/course.model';
+import { AttendanceModel, UserOnCourseModel } from './model/course.model';
 
 @Injectable()
 export class CourseService {
@@ -326,6 +326,41 @@ export class CourseService {
     });
   }
 
+  async getStudentAttendanceStateList(inform: GetStudentAttendanceStateListDto): Promise<AttendanceModel[]> {
+    const res = await this.prisma.attendance.findMany({
+      where: {
+        classId: inform.classId,
+        created: {
+          gte: inform.startDate,
+          lte: inform.endDate
+        }
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            buID: true
+          }
+        }
+      }
+    });
+
+    const formattedAttendances = res.map((attendance) => {
+      return {
+        id: attendance.id,
+        attendanceType: attendance.attendanceType,
+        created: attendance.created,
+        fullName: `${attendance.user.lastName} ${attendance.user.firstName}`,
+        buID: attendance.user.buID,
+        classId: attendance.classId,
+        userId: attendance.userId
+      };
+    });
+
+    return formattedAttendances;
+  }
+
   // async checkDuplicateAttendanceCode(attendanceCode: string): Promise<boolean> {
   //   const courseAttendanceCodeCount = await this.prisma.course.count({
   //     where: {
@@ -335,17 +370,6 @@ export class CourseService {
   //
   //   return courseAttendanceCodeCount !== 0;
   // }
-
-  async getStudentAttendanceStateList(inform: GetStudentAttendanceStateListDto): Promise<Attendance[]> {
-    return this.prisma.attendance.findMany({
-      where: {
-        created: {
-          gte: inform.startDate,
-          lte: inform.endDate
-        }
-      }
-    });
-  }
 
   // async getProfessorByCourseId(courseId: string): Promise<User> {
   //   return this.prisma.course.findUnique({

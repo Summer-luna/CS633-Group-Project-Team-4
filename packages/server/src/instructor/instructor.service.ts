@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserOnCourse } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CourseService } from 'src/course/course.service';
-import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto } from '../course/dto/course.dto';
-import { CourseModel } from '../course/model/course.model';
+import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto, GetStudentAttendanceStateListDto } from '../course/dto/course.dto';
+import { AttendanceModel, CourseModel } from '../course/model/course.model';
 
 @Injectable()
 export class InstructorService {
@@ -27,5 +27,9 @@ export class InstructorService {
 
   async markAbsence(input: { id: string }) {
     return this.courseService.markAbsence(input);
+  }
+
+  async getAttendanceByDateRange(input: GetStudentAttendanceStateListDto): Promise<AttendanceModel[]> {
+    return this.courseService.getStudentAttendanceStateList(input);
   }
 }

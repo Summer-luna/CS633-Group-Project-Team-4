@@ -41,3 +41,27 @@ export class UserOnCourseModel {
   @Field()
   enrolled: Date;
 }
+
+@ObjectType()
+export class AttendanceModel {
+  @Field()
+  id: string;
+
+  @Field()
+  attendanceType: number;
+
+  @Field()
+  created: Date;
+
+  @Field()
+  fullName: string;
+
+  @Field()
+  buID: string;
+
+  @Field()
+  userId: string;
+
+  @Field()
+  classId: string;
+}

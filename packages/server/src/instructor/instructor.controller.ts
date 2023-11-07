@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Delete, UseGuards, Get, Param, Put } from '@nestjs/common';
 import { InstructorService } from './instructor.service';
 import { UserOnCourse } from '@prisma/client';
-import { AddCourseDto, GetAttendanceCodeDto } from '../course/dto/course.dto';
+import { AddCourseDto, GetAttendanceCodeDto, GetStudentAttendanceStateListDto } from '../course/dto/course.dto';
 import { DeleteCourseDto } from './dto/instructor.dto';
 import { Role } from '../auth/enum/role.enum';
 import { Roles } from '../auth/roles.decorator';
@@ -44,5 +44,12 @@ export class InstructorController {
   @Post('/attendance/markAbsence')
   async markAbsence(@Body() input: { id: string }) {
     return this.instructorService.markAbsence(input);
+  }
+
+  @UseGuards(AuthGuard)
+  @Roles(Role.Professor)
+  @Post('/attendance/report')
+  async getAttendanceByDateRange(@Body() input: GetStudentAttendanceStateListDto) {
+    return this.instructorService.getAttendanceByDateRange(input);
   }
 }
