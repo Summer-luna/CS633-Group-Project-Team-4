@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto, GetCourseByNameDto, GetStudentAttendanceStateListDto, UpdateCourseDto } from './dto/course.dto';
 import { CourseModel, UserOnCourseModel } from './model/course.model';
 
 @Controller('course')
@@ -40,5 +40,10 @@ export class CourseController {
   @Post('/markAbsence')
   async markAbsence(@Body() input: { id: string }) {
     return this.courseService.markAbsence(input);
+  }
+
+  @Get('/getattendancestatelist')
+  async getStudentAttendanceStateList(@Body() input: GetStudentAttendanceStateListDto): Promise<Attendance[]> {
+    return this.courseService.getStudentAttendanceStateList(input);
   }
 }
