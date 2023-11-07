@@ -17,8 +17,13 @@ export class StudentController {
     return this.studentService.dropCourse(input);
   }
 
-  @Put('takeAttendance')
+  @Post('/takeAttendance')
   async takeAttendance(@Body() input: AttendanceTypeEditDto): Promise<Attendance> {
     return this.studentService.takeAttendance(input);
+  }
+
+  @Post('/checkAttendance')
+  async checkAttendance(@Body() input: AttendanceTypeEditDto): Promise<Attendance> {
+    return this.studentService.checkAttendance(input);
   }
 }
