@@ -2,6 +2,7 @@ import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto, GetCourseByNameDto, GetStudentAttendanceStateListDto, UpdateCourseDto } from './dto/course.dto';
 import { CourseModel, UserOnCourseModel } from './model/course.model';
+import { Attendance } from '@prisma/client';
 
 @Controller('course')
 export class CourseController {
