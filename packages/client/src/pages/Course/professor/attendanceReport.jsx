@@ -1,13 +1,18 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { StudentTable } from './studentTable.jsx';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { endOfWeek, startOfWeek } from 'date-fns';
 import DownloadIcon from '@mui/icons-material/Download';
+import { axiosInstance } from '../../../utils/axioInstance.js';
+import { useAuth } from '../../../context/auth.context.jsx';
+import { useParams } from 'react-router-dom';
 
 export const AttendanceReport = () => {
-  const [absence, setAbsence] = useState(0);
+  const { token } = useAuth();
+  const { courseId } = useParams();
   const date = new Date();
+  const [rows, setRows] = useState([]);
   const [dateRange, setDateRange] = useState({
     startDate: startOfWeek(date, { weekStartsOn: 1 }),
     endDate: endOfWeek(date, { weekStartsOn: 1 })
@@ -36,10 +41,10 @@ export const AttendanceReport = () => {
     {
       field: 'attendance',
       name: 'Attendance',
-      render: () => (
+      render: (row) => (
         <FormControl>
           <InputLabel id="demo-simple-select-label">Absence</InputLabel>
-          <Select labelId="demo-simple-select-label" id="demo-simple-select" value={absence} label="Absence" onChange={handleChange}>
+          <Select labelId="demo-simple-select-label" id="demo-simple-select" value={row.attendance} label="Absence" onChange={handleChange}>
             <MenuItem value={0}>Absence</MenuItem>
             <MenuItem value={1}>Present</MenuItem>
             <MenuItem value={2}>Excused</MenuItem>
@@ -49,28 +54,32 @@ export const AttendanceReport = () => {
     }
   ];
 
-  const rows = [
-    {
-      id: '123456',
-      name: 'Khushbu Kumari',
-      date: '10/10/2021'
-    },
-    {
-      id: '246802',
-      name: 'Xinyue Luna',
-      date: '10/10/2021'
-    },
-    {
-      id: '369258',
-      name: 'Yilin Li',
-      date: '10/10/2021'
-    },
-    {
-      id: '482604',
-      name: 'Nelson Montesinos',
-      date: '10/10/2021'
-    }
-  ];
+  useEffect(() => {
+    const getAttendances = async () => {
+      const res = await axiosInstance.post(
+        '/instructor/attendance/report',
+        {
+          classId: courseId,
+          startDate: dateRange.startDate,
+          endDate: dateRange.endDate
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      if (res.data) {
+        const attendances = res.data;
+        const data = attendances.map((attendance) => {
+          return { id: attendance.buID, name: attendance.fullName, date: attendance.created, attendance: attendance.attendanceType };
+        });
+        setRows(data);
+      }
+    };
+
+    token && getAttendances();
+  }, [dateRange, token]);
 
   return (
     <Stack gap={4}>
@@ -101,9 +110,6 @@ export const AttendanceReport = () => {
             }));
           }}
         />
-        <Button variant="contained" sx={{ backgroundColor: "#265792'" }}>
-          Display
-        </Button>
         <Button variant="contained" sx={{ backgroundColor: "#265792'" }} endIcon={<DownloadIcon />}>
           Download
         </Button>
