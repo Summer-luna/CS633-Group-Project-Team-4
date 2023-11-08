@@ -18,6 +18,8 @@ export const AttendanceReport = () => {
     endDate: endOfWeek(date, { weekStartsOn: 1 })
   });
 
+  console.log(rows);
+
   const handleChange = async (event, row) => {
     const attendanceType = event.target.value;
     await axiosInstance.put(
@@ -55,10 +57,10 @@ export const AttendanceReport = () => {
       name: 'Attendance',
       render: (row) => (
         <FormControl>
-          <InputLabel id="demo-simple-select-label">Absence</InputLabel>
+          <InputLabel id="demo-simple-select-label">Attendance</InputLabel>
           <Select labelId="demo-simple-select-label" id="demo-simple-select" defaultValue={row.attendance} label="Absence" onChange={(event) => handleChange(event, row)}>
-            <MenuItem value={0}>Absence</MenuItem>
-            <MenuItem value={1}>Present</MenuItem>
+            <MenuItem value={0}>Present</MenuItem>
+            <MenuItem value={1}>Absent</MenuItem>
             <MenuItem value={2}>Excused</MenuItem>
           </Select>
         </FormControl>
