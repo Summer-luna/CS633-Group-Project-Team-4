@@ -17,11 +17,9 @@ export const AttendanceReport = () => {
     startDate: startOfWeek(date, { weekStartsOn: 1 }),
     endDate: endOfWeek(date, { weekStartsOn: 1 })
   });
-  const [attendanceType, setAttendanceType] = useState(0);
 
   const handleChange = async (event, row) => {
     const attendanceType = event.target.value;
-    setAttendanceType(attendanceType);
     const res = await axiosInstance.put(
       '/instructor/attendance/report/update',
       {
@@ -34,8 +32,6 @@ export const AttendanceReport = () => {
         }
       }
     );
-
-    console.log(res.data);
   };
 
   const tableConfig = [
