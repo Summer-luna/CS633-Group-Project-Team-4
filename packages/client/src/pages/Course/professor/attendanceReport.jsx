@@ -17,9 +17,25 @@ export const AttendanceReport = () => {
     startDate: startOfWeek(date, { weekStartsOn: 1 }),
     endDate: endOfWeek(date, { weekStartsOn: 1 })
   });
+  const [attendanceType, setAttendanceType] = useState(0);
 
-  const handleChange = (event) => {
-    setAbsence(event.target.value);
+  const handleChange = async (event, row) => {
+    const attendanceType = event.target.value;
+    setAttendanceType(attendanceType);
+    const res = await axiosInstance.put(
+      '/instructor/attendance/report/update',
+      {
+        id: row.attendanceId,
+        attendanceType: attendanceType
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    console.log(res.data);
   };
 
   const tableConfig = [
@@ -44,7 +60,7 @@ export const AttendanceReport = () => {
       render: (row) => (
         <FormControl>
           <InputLabel id="demo-simple-select-label">Absence</InputLabel>
-          <Select labelId="demo-simple-select-label" id="demo-simple-select" value={row.attendance} label="Absence" onChange={handleChange}>
+          <Select labelId="demo-simple-select-label" id="demo-simple-select" defaultValue={row.attendance} label="Absence" onChange={(event) => handleChange(event, row)}>
             <MenuItem value={0}>Absence</MenuItem>
             <MenuItem value={1}>Present</MenuItem>
             <MenuItem value={2}>Excused</MenuItem>
@@ -72,7 +88,7 @@ export const AttendanceReport = () => {
       if (res.data) {
         const attendances = res.data;
         const data = attendances.map((attendance) => {
-          return { id: attendance.buID, name: attendance.fullName, date: attendance.created, attendance: attendance.attendanceType };
+          return { id: attendance.buID, name: attendance.fullName, date: attendance.created, attendance: attendance.attendanceType, attendanceId: attendance.id };
         });
         setRows(data);
       }
