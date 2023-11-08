@@ -161,3 +161,16 @@ export class GetStudentAttendanceStateListDto {
   @Field()
   endDate: Date;
 }
+
+@InputType()
+export class AttendanceTypeUpdateDto {
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  id: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Field()
+  attendanceType: number;
+}

@@ -3,6 +3,7 @@ import {
   AddCourseDto,
   AttendanceTypeCheckDto,
   AttendanceTypeInputDto,
+  AttendanceTypeUpdateDto,
   CheckInDto,
   DeleteCourseDto,
   GetAttendanceCodeDto,
@@ -259,7 +260,9 @@ export class CourseService {
     return correctCode && code === correctCode.attendanceCode;
   }
 
-  async updateAttendanceState(id: string, attendanceType: number): Promise<Attendance> {
+  async updateAttendanceState(input: AttendanceTypeUpdateDto): Promise<Attendance> {
+    const { id, attendanceType } = input;
+
     return this.prisma.attendance.update({
       where: {
         id: id
