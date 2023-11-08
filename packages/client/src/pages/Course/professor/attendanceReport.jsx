@@ -20,7 +20,7 @@ export const AttendanceReport = () => {
 
   const handleChange = async (event, row) => {
     const attendanceType = event.target.value;
-    const res = await axiosInstance.put(
+    await axiosInstance.put(
       '/instructor/attendance/report/update',
       {
         id: row.attendanceId,
