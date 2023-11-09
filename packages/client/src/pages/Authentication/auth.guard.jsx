@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Paths } from '@constants/paths';
+import { Paths } from '../../constants/Paths.js';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth.context.jsx';
 
