@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "nest build",
-    "build:deploy": "npm i && npm run build",
+    "build:deploy": "npm i && npm run migrate:deploy && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier": "prettier -l \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier -wl \"src/**/*.ts\" \"test/**/*.ts\"",
