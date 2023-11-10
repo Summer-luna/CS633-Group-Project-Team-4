@@ -7,6 +7,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { useAuth } from '../../../context/auth.context.jsx';
 import { useParams } from 'react-router-dom';
+import { CSVLink } from 'react-csv';
 
 export const AttendanceReport = () => {
   const { token } = useAuth();
@@ -17,8 +18,8 @@ export const AttendanceReport = () => {
     startDate: startOfWeek(date, { weekStartsOn: 1 }),
     endDate: endOfWeek(date, { weekStartsOn: 1 })
   });
-
-  console.log(rows);
+  const [csvHeader, setCsvHeader] = useState([]);
+  const [csvData, setCsvData] = useState([]);
 
   const handleChange = async (event, row) => {
     const attendanceType = event.target.value;
@@ -68,6 +69,72 @@ export const AttendanceReport = () => {
     }
   ];
 
+  const createCsvHeader = () => {
+    const header = [
+      {
+        label: 'Student Last',
+        key: 'lastName'
+      },
+      {
+        label: 'Student First',
+        key: 'firstName'
+      }
+    ];
+
+    const uniqueDate = {};
+
+    rows.map((row) => {
+      let date = row.date.substring(0, 10);
+      uniqueDate[date] = date;
+    });
+
+    //Sort the date to be able to display date time from earliest to latest.
+    Object.keys(uniqueDate)
+      .sort((a, b) => {
+        return new Date(a) - new Date(b);
+      })
+      .forEach((key) => {
+        header.push({ label: uniqueDate[key], key: uniqueDate[key] });
+      });
+
+    setCsvHeader(header);
+  };
+
+  const createCsvData = () => {
+    const transformedData = new Map();
+
+    rows.map((row) => {
+      const { date, userId, attendance } = row;
+      let shortDate = date.substring(0, 10);
+
+      if (!transformedData.has(userId)) {
+        transformedData.set(userId, new Map());
+      }
+
+      transformedData.get(userId).set(shortDate, attendance);
+    });
+
+    const uniqueDate = Array.from(new Set(rows.map((row) => row.date.substring(0, 10)))).sort();
+
+    const result = Object.fromEntries(Array.from(transformedData, ([user, dateMap]) => [user, Object.fromEntries(uniqueDate.map((date) => [date, dateMap.get(date)]))]));
+
+    let finalResult = [];
+    for (const [key, value] of Object.entries(result)) {
+      const data = rows.find((row) => row.userId === key);
+      finalResult.push({ firstName: data.firstName, lastName: data.lastName, ...value });
+    }
+
+    setCsvData(finalResult);
+  };
+
+  const getCsvHeader = () => {
+    return csvHeader;
+  };
+
+  const getCsvData = () => {
+    return csvData;
+  };
+
   useEffect(() => {
     const getAttendances = async () => {
       const res = await axiosInstance.post(
@@ -86,7 +153,16 @@ export const AttendanceReport = () => {
       if (res.data) {
         const attendances = res.data;
         const data = attendances.map((attendance) => {
-          return { id: attendance.buID, name: attendance.fullName, date: attendance.created, attendance: attendance.attendanceType, attendanceId: attendance.id };
+          return {
+            id: attendance.buID,
+            name: attendance.fullName,
+            firstName: attendance.firstName,
+            lastName: attendance.lastName,
+            date: attendance.created,
+            attendance: attendance.attendanceType,
+            attendanceId: attendance.id,
+            userId: attendance.userId
+          };
         });
         setRows(data);
       }
@@ -94,6 +170,11 @@ export const AttendanceReport = () => {
 
     token && getAttendances();
   }, [dateRange, token]);
+
+  const getCsv = () => {
+    createCsvHeader();
+    createCsvData();
+  };
 
   return (
     <Stack gap={4}>
@@ -124,9 +205,11 @@ export const AttendanceReport = () => {
             }));
           }}
         />
-        <Button variant="contained" sx={{ backgroundColor: "#265792'" }} endIcon={<DownloadIcon />}>
-          Download
-        </Button>
+        <CSVLink data={getCsvData()} headers={getCsvHeader()} filename={'Attendance_Report.csv'} onClick={getCsv}>
+          <Button variant="contained" sx={{ backgroundColor: "#265792'" }} endIcon={<DownloadIcon />}>
+            Download
+          </Button>
+        </CSVLink>
       </Stack>
       <StudentTable tableConfig={tableConfig} rows={rows} />
     </Stack>

@@ -354,6 +354,8 @@ export class CourseService {
         id: attendance.id,
         attendanceType: attendance.attendanceType,
         created: attendance.created,
+        firstName: attendance.user.firstName,
+        lastName: attendance.user.lastName,
         fullName: `${attendance.user.lastName} ${attendance.user.firstName}`,
         buID: attendance.user.buID,
         classId: attendance.classId,
