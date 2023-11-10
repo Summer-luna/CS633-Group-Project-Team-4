@@ -1,4 +1,4 @@
-import { Paths } from '@constants/paths';
+import { Paths } from '../../constants/Paths.js';
 import { CircularProgress, Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
