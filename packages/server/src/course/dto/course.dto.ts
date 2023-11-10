@@ -154,12 +154,14 @@ export class GetStudentAttendanceStateListDto {
   classId: string;
 
   @IsDate()
+  @IsOptional()
   @Field()
-  startDate: Date;
+  startDate?: Date;
 
   @IsDate()
   @Field()
-  endDate: Date;
+  @IsOptional()
+  endDate?: Date;
 }
 
 @InputType()

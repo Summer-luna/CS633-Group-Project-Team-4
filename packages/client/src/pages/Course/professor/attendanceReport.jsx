@@ -20,6 +20,7 @@ export const AttendanceReport = () => {
   });
   const [csvHeader, setCsvHeader] = useState([]);
   const [csvData, setCsvData] = useState([]);
+  const [attendances, setAttendances] = useState([]);
 
   const handleChange = async (event, row) => {
     const attendanceType = event.target.value;
@@ -164,14 +165,46 @@ export const AttendanceReport = () => {
             userId: attendance.userId
           };
         });
-        setRows(data);
+        setAttendances(data);
       }
     };
 
     token && getAttendances();
   }, [dateRange, token]);
 
+  const getAllAttendances = async () => {
+    const res = await axiosInstance.post(
+      '/instructor/attendance/report',
+      {
+        classId: courseId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (res.data) {
+      const attendances = res.data;
+      const data = attendances.map((attendance) => {
+        return {
+          id: attendance.buID,
+          name: attendance.fullName,
+          firstName: attendance.firstName,
+          lastName: attendance.lastName,
+          date: attendance.created,
+          attendance: attendance.attendanceType,
+          attendanceId: attendance.id,
+          userId: attendance.userId
+        };
+      });
+      setRows(data);
+    }
+  };
+
   const getCsv = () => {
+    token && getAllAttendances();
     createCsvHeader();
     createCsvData();
   };
@@ -211,7 +244,7 @@ export const AttendanceReport = () => {
           </Button>
         </CSVLink>
       </Stack>
-      <StudentTable tableConfig={tableConfig} rows={rows} />
+      <StudentTable tableConfig={tableConfig} rows={attendances} />
     </Stack>
   );
 };
