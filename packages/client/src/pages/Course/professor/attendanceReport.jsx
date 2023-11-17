@@ -203,10 +203,15 @@ export const AttendanceReport = () => {
     }
   };
 
-  const getCsv = () => {
+  useEffect(() => {
     token && getAllAttendances();
-    createCsvHeader();
-    createCsvData();
+  }, [token]);
+
+  const getCsv = async () => {
+    if (rows.length > 0) {
+      createCsvHeader();
+      createCsvData();
+    }
   };
 
   return (
