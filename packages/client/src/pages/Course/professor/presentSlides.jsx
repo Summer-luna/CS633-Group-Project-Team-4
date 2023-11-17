@@ -67,7 +67,7 @@ export const PresentSlides = () => {
       </Stack>
       <Stack minWidth="40%" gap={3}>
         <Button variant="contained" sx={{ maxWidth: '300px' }} onClick={handleAttendanceDialogOpen}>
-          Take Attendance
+          Record Attendance
         </Button>
         <Link to={`${Paths.COURSE}/${id}`} state={{ courseName: name }} style={{ maxWidth: '300px' }}>
           <Button variant="contained" sx={{ backgroundColor: '#24444F' }} fullWidth>

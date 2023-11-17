@@ -112,7 +112,8 @@ export const AttendanceReport = () => {
         transformedData.set(userId, new Map());
       }
 
-      transformedData.get(userId).set(shortDate, attendance);
+      let symbol = attendance === 0 ? '✅' : '❌';
+      transformedData.get(userId).set(shortDate, symbol);
     });
 
     const uniqueDate = Array.from(new Set(rows.map((row) => row.date.substring(0, 10)))).sort();
