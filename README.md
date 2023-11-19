@@ -35,7 +35,33 @@ Alternatively, instead of using the hosted version of the product, ClassGuardian
 ### Pre-requisites
 To be able to start development on ClassGuardian, make sure that you have the following prerequisites installed:
 
+* Install posgresql
+* Create database in postgresql called classguardian
+* Create a .env file in server folder AND using your own database url to replace one in the “.env” file
+* Switch to CS633-Group-Project-Team-4/packages/server folder
+* Run npm i to install all packages
+* Run npm run migrate:dev command
+* Run npm run prisma:seed command
+* Run npm run start:dev to run the application - localhost:3000
 
+## API's
+
+| API Name | API Method | Description | Inputs |
+| -------- | ---------- | ----------- | ------ |
+| /auth/signup | POST | Able to sign up user | email: String, password: String, lastName: String, firstName String, buId: String, role: Number |
+| /auth/login | POST | Able to sign in | email: String, password: String |
+| /user/:id | GET | Get user by id with course information | |
+| /student/enroll | POST | Student able to enter join code to add the course | studentID: String, joinCode: String |
+| /student/drop | POST | Student able to drop the course | courseId: String, userId: String | 
+| /student/checkAttendance | POST | Check if an record in today is exists in database | classId: String, userId: String |
+| /student/takeAttendance | POST | Insert an attendance record | classId: String, userId: String, attendanceCode: String |
+| /instructor/course/add | POST | Professor add course and associate course to his account | userId: String, name: String, description: String, location: String, semesterId: number, startDate: date, endDate: date |
+| /instructor/course/:id | GET | Get course detail by id with related students | id: String |
+| /instructor/course/delete | DELETE | Professor delete the course | userId: String, courseId: String |
+| /instructor/attendance/update | PUT | Update attendance code | classId: String, attendanceCode: String |
+| /instructor/attendance/markAbsence | POST | Mark absence who fails to attend | id: String |
+| /instructor/attendance/report | POST | Get attendances by date range | classId: String, startDate: date, endDate: date |
+| /instructor/attendance/report/update | PUT | Update attendance type | id: String, attendanceType: number |
 
 ## Contributing
 
