@@ -26,7 +26,7 @@ If an instructor is using ClassGuardian to track their class attendance, his stu
 
 ## Usage
 
-To get started with ClassGuardian, the hosted version of the product can be used. You can get started immediately at (https://classguardian-client.onrender.com/login) 
+To get started with ClassGuardian, the hosted version of the product can be used. You can get started immediately at ([https://classguardian-client.xinyuechen.online/](https://classguardian-client.xinyuechen.online/)) 
 
 ## Development
 
@@ -37,12 +37,12 @@ To be able to start development on ClassGuardian, make sure that you have the fo
 
 * Install posgresql
 * Create database in postgresql called classguardian
-* Create a .env file in server folder AND using your own database url to replace one in the “.env” file
+* Create a `.env` file in server folder AND using your own database url to replace one in the “.env” file
 * Switch to CS633-Group-Project-Team-4/packages/server folder
-* Run npm i to install all packages
-* Run npm run migrate:dev command
-* Run npm run prisma:seed command
-* Run npm run start:dev to run the application - localhost:3000
+* Run `npm i` to install all packages
+* Run `npm run migrate:dev` command
+* Run `npm run prisma:seed` command
+* Run `npm run start:dev` to run the application - localhost:3000
 
 ## API's
 
