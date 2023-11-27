@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 0 is student
+// 1 is professor
+model User {
+  id         String         @id @default(uuid())
+  email      String         @unique
+  lastName   String
+  firstName  String
+  buID       String?        @unique
+  password   String?
+  role       Int            @default(0)
+  createdAt  DateTime       @default(now())
+  courses    UserOnCourse[]
+  Attendance Attendance[]
+}
+
+model Course {
+  id             String         @id @default(uuid())
+  joinCode       String         @unique
+  attendanceCode String?        @unique
+  name           String
+  description    String?
+  location       String?
+  semesterId     Int
+  semester       Semester       @relation(fields: [semesterId], references: [id])
+  startDate      DateTime       @db.Date
+  endDate        DateTime       @db.Date
+  User           UserOnCourse[]
+  Attendance     Attendance[]
+}
+
+model UserOnCourse {
+  userId   String
+  User     User     @relation(fields: [userId], references: [id])
+  courseId String
+  Course   Course   @relation(fields: [courseId], references: [id])
+  enrolled DateTime @default(now())
+
+  @@id([courseId, userId])
+}
+
+model Semester {
+  id     Int      @id @default(autoincrement())
+  name   String
+  Course Course[]
+}
+
+// 0 - present
+// 1 - absent
+// 2 - excused
+
+model Attendance {
+  id             String         @id @default(uuid())
+  classId        String
+  class          Course         @relation(fields: [classId], references: [id])
+  attendanceType Int            @default(0)
+  type           AttendanceType @relation(fields: [attendanceType], references: [id])
+  userId         String
+  user           User           @relation(fields: [userId], references: [id])
+  created        DateTime       @default(now())
+}
+
+model AttendanceType {
+  id         Int          @id @default(autoincrement())
+  name       String
+  Attendance Attendance[]
+}
