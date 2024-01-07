@@ -1,17 +1,17 @@
 import { Paths } from './constants/Paths.js';
-import { Home } from './pages/Home/home.jsx';
-import { Layout } from './pages/Home/layout.jsx';
-import { SignUp } from './pages/Authentication/signUp.jsx';
+import { Home } from './pages/home/Home.jsx';
+import { Layout } from './pages/home/Layout.jsx';
+import { SignUp } from './pages/authentication/SignUp.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { SignIn } from './pages/Authentication/signIn.jsx';
+import { SignIn } from './pages/authentication/SignIn.jsx';
 import { AuthProvider } from './context/auth.context.jsx';
-import { AuthGuard } from './pages/Authentication/auth.guard.jsx';
-import { Logout } from './pages/Authentication/logout.jsx';
+import { AuthGuard } from './pages/authentication/auth.guard.jsx';
+import { Logout } from './pages/authentication/Logout.jsx';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { PresentSlides } from './pages/Course/professor/presentSlides.jsx';
-import { AttendanceReport } from './pages/Course/professor/attendanceReport.jsx';
-import { CourseDetailGuard } from './pages/Course/courseDetailGuard.jsx';
+import { PresentSlides } from './pages/course/professor/PresentSlides.jsx';
+import { AttendanceReport } from './pages/course/professor/AttendanceReport.jsx';
+import { CourseDetailGuard } from './pages/course/CourseDetailGuard.jsx';
 import { AttendanceProvider } from './context/attendance.context.jsx';
 
 function App() {
