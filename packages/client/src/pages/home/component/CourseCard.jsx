@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState } from 'react';
-import { DeleteCourseDialog } from './deleteCourseDialog.jsx';
+import { DeleteCourseDialog } from './DeleteCourseDialog.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants/Paths.js';
 

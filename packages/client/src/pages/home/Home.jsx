@@ -1,11 +1,11 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { CourseCard } from './component/courseCard.jsx';
-import { AddCourseDialog } from './component/addCourseDialog.jsx';
-import { AddStudentCourseDialog } from './component/addStudentCourseDialog.jsx';
+import { CourseCard } from './component/CourseCard.jsx';
+import { AddCourseDialog } from './component/AddCourseDialog.jsx';
+import { AddStudentCourseDialog } from './component/AddStudentCourseDialog.jsx';
 import { useEffect, useReducer, useState } from 'react';
 import { useAuth } from '../../context/auth.context.jsx';
 import { axiosInstance } from '../../utils/axioInstance.js';
-import { Actions, courseReducer } from '../../reducer/courseReducer.jsx';
+import { Actions, courseReducer } from '../../reducer/course_reducer.jsx';
 
 export const Home = () => {
   const [addDialogOpen, setAddDialogOpen] = useState(false);

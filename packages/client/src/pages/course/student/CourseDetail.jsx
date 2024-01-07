@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import { useEffect, useState } from 'react';
-import { AttendanceDialog } from './attendanceDialog.jsx';
+import { AttendanceDialog } from './AttendanceDialog.jsx';
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { useParams } from 'react-router-dom';
 import { useCourseDetail } from '../../../hooks/useCourseDetail.jsx';

@@ -1,5 +1,5 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
-import { StudentTable } from './studentTable.jsx';
+import { StudentTable } from './StudentTable.jsx';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useEffect, useState } from 'react';
 import { endOfWeek, startOfWeek } from 'date-fns';

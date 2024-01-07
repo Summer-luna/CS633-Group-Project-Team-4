@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { Paths } from '../../../constants/Paths.js';
-import { AttendanceDialog } from './attendanceDialog.jsx';
+import { AttendanceDialog } from './AttendanceDialog.jsx';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../../utils/axioInstance.js';
 import { useAuth } from '../../../context/auth.context.jsx';
