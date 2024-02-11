@@ -11,10 +11,9 @@ import { DeleteStudentDialog } from './DeleteStudentDialog.jsx';
 import { useCourseDetail } from '../../../hooks/useCourseDetail.jsx';
 import { InputFileUpload } from './components/InputFileUpload.jsx';
 import * as XLSX from 'xlsx';
-import jwt_decode from 'jwt-decode';
 
 export const Students = () => {
-  const { token, decoded_token } = useAuth();
+  const { token } = useAuth();
   const { courseId } = useParams();
   const [students, setStudents] = useState([]);
   const location = useLocation();
@@ -72,7 +71,7 @@ export const Students = () => {
           })
           .filter((student) => student.email && student.firstName && student.lastName && student.buID);
 
-        const userResponse = await axiosInstance.post('/instructor/updateRoster', {
+        await axiosInstance.post('/instructor/updateRoster', {
           courseId: courseId,
           joinCode: course.joinCode,
           studentList: studentList

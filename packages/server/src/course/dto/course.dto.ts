@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString, IsDate, IsObject } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
 import { UserSignupDto } from '../../auth/dto/auth.dto';
 
 @InputType()
