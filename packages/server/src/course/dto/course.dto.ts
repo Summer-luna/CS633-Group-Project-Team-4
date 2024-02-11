@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString, IsDate } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString, IsDate, IsObject } from 'class-validator';
+import { UserSignupDto } from '../../auth/dto/auth.dto';
 
 @InputType()
 export class AddCourseDto {
@@ -107,31 +108,16 @@ export class CheckInDto {
 }
 
 @InputType()
-export class AttendanceTypeCheckDto {
-  @IsNotEmpty()
+export class EnrollManyDto {
   @IsString()
+  @IsNotEmpty()
   @Field()
-  classId: string;
+  courseId: string;
 
   @IsNotEmpty()
   @IsString()
   @Field()
   userId: string;
-}
-
-@InputType()
-export class AttendanceTypeInputDto extends AttendanceTypeCheckDto {
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  attendanceCode: string;
-}
-
-@InputType()
-export class AttendanceTypeEditDto extends AttendanceTypeInputDto {
-  @IsString()
-  @Field()
-  attendanceId: string;
 }
 
 @InputType()
@@ -146,33 +132,20 @@ export class GetAttendanceCodeDto {
   attendanceCode?: string;
 }
 
-@InputType()
-export class GetStudentAttendanceStateListDto {
-  @IsNotEmpty()
+export class HandleUploadRosterDto {
+  @IsDefined()
   @IsString()
-  @Field()
-  classId: string;
-
-  @IsDate()
-  @IsOptional()
-  @Field()
-  startDate?: Date;
-
-  @IsDate()
-  @Field()
-  @IsOptional()
-  endDate?: Date;
-}
-
-@InputType()
-export class AttendanceTypeUpdateDto {
   @IsNotEmpty()
+  @Field()
+  joinCode: string;
+
+  @IsDefined()
   @IsString()
+  @IsNotEmpty()
   @Field()
-  id: string;
+  courseId: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  @Field()
-  attendanceType: number;
+  @Field(() => [UserSignupDto])
+  studentList: UserSignupDto[];
 }

@@ -16,7 +16,6 @@ export class AuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const { headers } = context.switchToHttp().getRequest();
-    console.log(headers.authorization);
 
     if (!headers.authorization) {
       this.logger.log('No authorization header found');

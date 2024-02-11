@@ -68,4 +68,30 @@ export class UserService {
   async getCourseById(id: string): Promise<Course> {
     return this.courseService.getCourseById(id);
   }
+
+  async getAllStudents() {
+    return this.prisma.user.findMany({
+      where: {
+        role: 0
+      }
+    });
+  }
+
+  async getAllStudentsByCourseId(courseId: string) {
+    const userList = await this.prisma.userOnCourse.findMany({
+      where: {
+        courseId: courseId,
+        User: {
+          role: 0
+        }
+      },
+      include: {
+        User: true
+      }
+    });
+
+    return userList.map((user) => {
+      return user.User.email;
+    });
+  }
 }
