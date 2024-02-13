@@ -8,8 +8,6 @@ services:
       - 80:80
   classguardian-backend:
     container_name: classguardian-server
-    depends_on:
-      - classguardian-postgres
     build: ./packages/server
     restart: always
     ports:
