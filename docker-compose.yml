@@ -2,7 +2,7 @@ version: "3"
 services:
   classguardian-frontend:
     container_name: classguardian-client
-    build: ./client
+    build: ./packages/client
     restart: always
     ports:
       - 80:80
@@ -10,7 +10,7 @@ services:
     container_name: classguardian-server
     depends_on:
       - classguardian-postgres
-    build: ./server
+    build: ./packages/server
     restart: always
     ports:
       - 3000:3000
