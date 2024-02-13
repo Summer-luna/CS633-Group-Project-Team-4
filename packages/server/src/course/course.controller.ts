@@ -1,8 +1,7 @@
 import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { AddCourseDto, DeleteCourseDto, GetAttendanceCodeDto, GetCourseByNameDto, GetStudentAttendanceStateListDto, UpdateCourseDto } from './dto/course.dto';
+import { AddCourseDto, DeleteCourseDto, GetCourseByNameDto, UpdateCourseDto } from './dto/course.dto';
 import { CourseModel, UserOnCourseModel } from './model/course.model';
-import { Attendance } from '@prisma/client';
 
 @Controller('course')
 export class CourseController {
@@ -34,17 +33,7 @@ export class CourseController {
   }
 
   @Get('/getattendencecode')
-  async getAttendanceCode(@Body() courseId: GetAttendanceCodeDto): Promise<string> {
+  async getAttendanceCode(@Body() courseId: string): Promise<string> {
     return this.courseService.getAttendanceCode(courseId);
-  }
-
-  @Post('/markAbsence')
-  async markAbsence(@Body() input: { id: string }) {
-    return this.courseService.markAbsence(input);
-  }
-
-  @Get('/getattendancestatelist')
-  async getStudentAttendanceStateList(@Body() input: GetStudentAttendanceStateListDto): Promise<Attendance[]> {
-    return this.courseService.getStudentAttendanceStateList(input);
   }
 }

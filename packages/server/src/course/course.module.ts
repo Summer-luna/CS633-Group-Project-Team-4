@@ -4,7 +4,7 @@ import { CourseController } from './course.controller';
 import { PrismaService } from 'nestjs-prisma';
 
 @Module({
-  providers: [CourseService, PrismaService],
+  providers: [PrismaService, CourseService],
   controllers: [CourseController],
   exports: [CourseService]
 })

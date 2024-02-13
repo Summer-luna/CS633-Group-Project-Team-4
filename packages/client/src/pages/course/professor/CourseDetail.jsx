@@ -9,6 +9,8 @@ import { Paths } from '../../../constants/Paths.js';
 import { Link } from 'react-router-dom';
 import { DeleteStudentDialog } from './DeleteStudentDialog.jsx';
 import { useCourseDetail } from '../../../hooks/useCourseDetail.jsx';
+import { InputFileUpload } from './components/InputFileUpload.jsx';
+import * as XLSX from 'xlsx';
 
 export const Students = () => {
   const { token } = useAuth();
@@ -42,6 +44,41 @@ export const Students = () => {
       getStudents();
     }
   }, [token]);
+
+  const handleFile = (e) => {
+    e.preventDefault();
+    const selectedFile = e.target.files[0];
+    const fileTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
+    if (selectedFile && fileTypes.includes(selectedFile.type)) {
+      let reader = new FileReader();
+      reader.readAsArrayBuffer(selectedFile);
+      reader.onload = async (e) => {
+        const workbook = XLSX.read(e.target.result, { type: 'buffer' });
+        const worksheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[worksheetName];
+        const data = XLSX.utils.sheet_to_json(worksheet);
+
+        const studentList = data
+          .map((student) => {
+            return {
+              email: student['Email'],
+              password: '12345',
+              firstName: student['Student First'],
+              lastName: student['Student Last'],
+              buID: student['Student ID'],
+              role: 0
+            };
+          })
+          .filter((student) => student.email && student.firstName && student.lastName && student.buID);
+
+        await axiosInstance.post('/instructor/updateRoster', {
+          courseId: courseId,
+          joinCode: course.joinCode,
+          studentList: studentList
+        });
+      };
+    }
+  };
 
   const handleDelete = async (studentId) => {
     const res = await axiosInstance.delete(`/student/drop`, {
@@ -90,13 +127,11 @@ export const Students = () => {
       name: 'Actions',
       render: (row) => {
         return (
-          <>
-            <Tooltip title="Delete">
-              <IconButton onClick={() => handleDeleteDialogOpen(row.userId)}>
-                <Delete sx={{ color: '#265792' }} />
-              </IconButton>
-            </Tooltip>
-          </>
+          <Tooltip title="Delete">
+            <IconButton onClick={() => handleDeleteDialogOpen(row.userId)}>
+              <Delete sx={{ color: '#265792' }} />
+            </IconButton>
+          </Tooltip>
         );
       }
     }
@@ -112,6 +147,7 @@ export const Students = () => {
       </Stack>
       <StudentTable tableConfig={tableConfig} rows={students} />
       <Stack direction="row" gap={3} justifyContent="end">
+        <InputFileUpload onChange={handleFile} />
         <Link to={`${Paths.COURSE}/${courseId}/present`} state={{ course }}>
           <Button variant="contained">Present Slides</Button>
         </Link>
