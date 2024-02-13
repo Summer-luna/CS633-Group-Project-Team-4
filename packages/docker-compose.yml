@@ -1,0 +1,18 @@
+version: "3"
+services:
+  classguardian-frontend:
+    container_name: classguardian-client
+    build: ./client
+    restart: always
+    ports:
+      - 80:80
+  classguardian-backend:
+    container_name: classguardian-server
+    depends_on:
+      - classguardian-postgres
+    build: ./server
+    restart: always
+    ports:
+      - 3000:3000
+volumes:
+  classguardian-production: ~
