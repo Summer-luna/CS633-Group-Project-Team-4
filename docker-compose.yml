@@ -2,12 +2,12 @@ version: "3"
 services:
   classguardian-frontend:
     container_name: classguardian-client
-    environment:
-      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
     build: ./packages/client
     restart: always
     ports:
       - 8080:80
+    env_file:
+      - path: ./packages/client/.env
   classguardian-backend:
     container_name: classguardian-server
     build: ./packages/server
@@ -15,6 +15,6 @@ services:
     ports:
       - 3000:3000
     env_file:
-      - path: ~/root/.env
+      - path: ./packages/server/.env
 volumes:
   classguardian-production: ~
