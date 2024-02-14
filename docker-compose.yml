@@ -5,12 +5,16 @@ services:
     build: ./packages/client
     restart: always
     ports:
-      - 80:80
+      - 8080:80
+    env_file:
+      - path: ./packages/client/.env
   classguardian-backend:
     container_name: classguardian-server
     build: ./packages/server
     restart: always
     ports:
       - 3000:3000
+    env_file:
+      - path: ./packages/server/.env
 volumes:
   classguardian-production: ~
