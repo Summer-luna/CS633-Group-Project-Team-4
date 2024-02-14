@@ -14,10 +14,7 @@ services:
     restart: always
     ports:
       - 3000:3000
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - PRIVATE_KEY=${PRIVATE_KEY}
-      - PUBLIC_KEY=${PUBLIC_KEY}
-      - JWT_EXPIRATION=${JWT_EXPIRATION}
+    env_file:
+      - path: ~/root/.env
 volumes:
   classguardian-production: ~
