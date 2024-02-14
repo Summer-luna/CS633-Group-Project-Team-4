@@ -5,7 +5,7 @@ services:
     build: ./packages/client
     restart: always
     ports:
-      - 80:80
+      - 8080:80
   classguardian-backend:
     container_name: classguardian-server
     build: ./packages/server
